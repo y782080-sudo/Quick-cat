@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
-  <title>Quick Cart · food delivery</title>
+  <title>Quick Cart · Food Delivery</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, system-ui, sans-serif; }
@@ -18,15 +18,13 @@
     .search-wrapper { background: #232323; border-radius: 40px; padding: 6px 18px; display: flex; align-items: center; gap: 10px; margin-bottom: 22px; border: 1px solid #333; }
     .search-wrapper i { color: #ff7a2f; font-size: 18px; }
     .search-wrapper input { background: transparent; border: none; padding: 14px 0; width: 100%; font-size: 16px; color: #f0f0f0; outline: none; }
-    .search-wrapper input::placeholder { color: #777; }
     
     .categories { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 16px; scrollbar-width: none; }
-    .categories::-webkit-scrollbar { display: none; }
-    .cat-item { background: #1f1f1f; padding: 10px 22px; border-radius: 40px; font-weight: 600; font-size: 15px; white-space: nowrap; border: 1px solid #2c2c2c; color: #ccc; transition: 0.15s; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.6); }
+    .cat-item { background: #1f1f1f; padding: 10px 22px; border-radius: 40px; font-weight: 600; font-size: 15px; white-space: nowrap; border: 1px solid #2c2c2c; color: #ccc; cursor: pointer; }
     .cat-item.active, .cat-item:hover { background: #ff6b1a; border-color: #ff6b1a; color: #0b0b0b; }
     
     .restaurant-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 10px 0 16px; }
-    .resto-card { background: #1e1e1e; border-radius: 24px; padding: 14px 12px 16px; border: 1px solid #2c2c2c; transition: all 0.15s ease; box-shadow: 0 6px 12px rgba(0,0,0,0.4); cursor: pointer; text-align: center; }
+    .resto-card { background: #1e1e1e; border-radius: 24px; padding: 14px 12px 16px; border: 1px solid #2c2c2c; cursor: pointer; text-align: center; }
     .resto-card:hover { background: #2a2a2a; border-color: #ff7a2f; transform: scale(0.98); }
     .resto-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; color: #f5f5f5; }
     .resto-card p { font-size: 12px; color: #aaa; }
@@ -46,8 +44,7 @@
     .menu-item-info { flex: 1; }
     .menu-item-info h4 { font-size: 16px; font-weight: 600; }
     .menu-item-info p { font-size: 15px; color: #ffb07a; font-weight: 600; }
-    .menu-item button { background: #ff6b1a; border: none; padding: 10px 16px; border-radius: 40px; font-weight: 700; color: #0b0b0b; font-size: 14px; cursor: pointer; transition: 0.1s; box-shadow: 0 4px 8px rgba(255,107,26,0.2); }
-    .menu-item button:active { transform: scale(0.92); }
+    .menu-item button { background: #ff6b1a; border: none; padding: 10px 16px; border-radius: 40px; font-weight: 700; color: #0b0b0b; font-size: 14px; cursor: pointer; }
     
     .cart-section { background: #1a1a1a; border-radius: 30px; padding: 16px 14px 20px; margin: 18px 0 12px; border: 1px solid #2e2e2e; }
     .cart-title { font-size: 20px; font-weight: 700; display: flex; gap: 10px; align-items: center; color: #ff8c2e; margin-bottom: 10px; }
@@ -61,9 +58,7 @@
     .order-section { background: #1a1a1a; border-radius: 30px; padding: 18px 16px; border: 1px solid #2e2e2e; margin-top: 12px; }
     .order-section h3 { margin-bottom: 14px; color: #ff8c2e; }
     .order-section input { width: 100%; padding: 14px 18px; border-radius: 60px; border: none; background: #292929; color: #fff; margin-bottom: 12px; font-size: 15px; }
-    .order-section input::placeholder { color: #777; }
-    .confirm-btn { background: #ff6b1a; border: none; width: 100%; padding: 16px; border-radius: 60px; font-weight: 700; font-size: 18px; color: #0b0b0b; cursor: pointer; margin: 10px 0 6px; box-shadow: 0 6px 12px rgba(255,107,26,0.2); }
-    .confirm-btn:active { transform: scale(0.96); }
+    .confirm-btn { background: #ff6b1a; border: none; width: 100%; padding: 16px; border-radius: 60px; font-weight: 700; font-size: 18px; color: #0b0b0b; cursor: pointer; margin: 10px 0 6px; }
     .empty-cart-msg { color: #888; padding: 14px 0; text-align: center; }
   </style>
 </head>
@@ -71,7 +66,7 @@
 <div id="app">
   <div class="app-header">
     <div class="logo-icon"><i class="fas fa-bolt"></i></div>
-    <div><span class="logo-text">My Cart</span><span class="logo-sub">delivery</span></div>
+    <div><span class="logo-text">Order Express</span><span class="logo-sub">Delivery</span></div>
   </div>
 
   <div class="search-wrapper">
@@ -120,53 +115,225 @@
 
 <script>
   (function() {
-    // ---------- DATA (17 restaurants with categories and items) ----------
+    // ---------- DATA (15 Restaurants with real menus) ----------
     const restaurantData = [
-      { id: 0, name: "Mommy's Kitchen", cat: "cafe" },
-      { id: 1, name: "London Restaurant", cat: "burger" },
-      { id: 2, name: "Cafe Time Out", cat: "cafe" },
-      { id: 3, name: "Sreemongol Kabab Mohol", cat: "kacchi" },
-      { id: 4, name: "Sip N Slay", cat: "drinks" },
-      { id: 5, name: "Laziz", cat: "pizza" },
-      { id: 6, name: "Pansi", cat: "dessert" },
-      { id: 7, name: "Kutum Bari", cat: "kacchi" },
-      { id: 8, name: "Ghushh Vandar", cat: "burger" },
-      { id: 9, name: "Rud Misti", cat: "dessert" },
-      { id: 10, name: "Dhaka Biriyani", cat: "kacchi" },
-      { id: 11, name: "Opurbo", cat: "pizza" },
-      { id: 12, name: "Dream Cake", cat: "dessert" },
-      { id: 13, name: "Dora Cake", cat: "dessert" },
-      { id: 14, name: "Dreyme Dessert", cat: "dessert" },
-      { id: 15, name: "Burger Boss", cat: "burger" },
-      { id: 16, name: "Kacci King", cat: "kacchi" }
+      { id: 0, name: "Mommy's Kitchen", cat: "burger", items: [
+        {name:"Crispy Chicken Burger", price:110, image:"🍔"}, {name:"Crispy Chicken Cheese Burger", price:150, image:"🍔"}, {name:"BBQ Chicken Burger", price:170, image:"🍔"}, {name:"Double Decker Burger", price:200, image:"🍔"}, {name:"American Burger", price:250, image:"🍔"}, {name:"Mommy's Kitchen Special Burger", price:250, image:"🍔"},
+        {name:"Chicken Sub", price:130, image:"🥪"}, {name:"Chicken Naga Sub", price:150, image:"🥪"}, {name:"BBQ Chicken Sub", price:170, image:"🥪"}, {name:"AMERICAN sub", price:250, image:"🥪"}, {name:"Club Sandwich", price:250, image:"🥪"},
+        {name:"Egg Chowmein", price:100, image:"🍜"}, {name:"Chicken Chowmein", price:140, image:"🍜"}, {name:"BBQ Chowmein", price:170, image:"🍜"}, {name:"MK Special Chowmein", price:200, image:"🍜"},
+        {name:"Regular Ramen", price:150, image:"🍜"}, {name:"Hot Ramen", price:180, image:"🍜"}, {name:"Momo Ramen", price:280, image:"🍜"}, {name:"Cheesy Ramen", price:350, image:"🍜"}, {name:"Prawn Ramen", price:380, image:"🍜"}, {name:"Special Ramen", price:400, image:"🍜"},
+        {name:"Regular Meatbox", price:230, image:"🥩"}, {name:"Spicy Meatbox", price:260, image:"🥩"}, {name:"Cheesy Meatbox", price:300, image:"🥩"}, {name:"BBQ Meatbox", price:300, image:"🥩"}, {name:"Special Meatbox", price:400, image:"🥩"},
+        {name:"Chicken Momo (5pcs)", price:135, image:"🥟"}, {name:"BBQ Fried Momo (5pcs)", price:160, image:"🥟"}, {name:"Gravy Momo (5pcs)", price:170, image:"🥟"}, {name:"Chicken Momo (8pcs)", price:180, image:"🥟"}, {name:"Cheesy Momo (5pcs)", price:180, image:"🥟"}, {name:"Chicken Dumplings (5pcs)", price:180, image:"🥟"}, {name:"Chicken Dumplings (8pcs)", price:220, image:"🥟"},
+        {name:"Regular Hot Dog", price:130, image:"🌭"}, {name:"Spicy Hot Dog", price:160, image:"🌭"}, {name:"Cheesy Hot Dog", price:190, image:"🌭"},
+        {name:"Tandoori Platter", price:190, image:"🍗"}, {name:"BBQ Platter", price:270, image:"🍗"}, {name:"Cheesy Tandoori Platter", price:300, image:"🍗"}, {name:"Alfredo Tandoori Platter", price:300, image:"🍗"}, {name:"Prawn Platter", price:330, image:"🍤"},
+        {name:"Chilli Chicken Rice Bowl", price:130, image:"🍚"}, {name:"Crispy Chicken Rice Bowl", price:150, image:"🍚"}, {name:"Chicken Dynamite Rice Bowl", price:170, image:"🍚"}, {name:"BBQ Fried Chicken Rice Bowl", price:180, image:"🍚"},
+        {name:"Spicy Rice Box", price:190, image:"🍱"}, {name:"BBQ Rice Box", price:220, image:"🍱"},
+        {name:"Veggie Pizza", price:399, image:"🍕"}, {name:"Pizza Texas", price:450, image:"🍕"}, {name:"BBQ Pizza", price:520, image:"🍕"}, {name:"MeatLover Pizza", price:530, image:"🍕"}, {name:"Loaded Pizza", price:580, image:"🍕"}, {name:"Sausage Edge Pizza", price:580, image:"🍕"},
+        {name:"Spicy Arrabiata Pasta", price:290, image:"🍝"}, {name:"Baked Pasta", price:320, image:"🍝"}, {name:"Creamy Alfredo Pasta", price:350, image:"🍝"}, {name:"Creamy Shrimp Pasta", price:350, image:"🍝"}, {name:"Mac & Cheese", price:350, image:"🍝"},
+        {name:"Half Chicken Tandoori", price:250, image:"🍗"}, {name:"Full Chicken Tandoori", price:480, image:"🍗"}, {name:"Half Prawn Tandoori", price:300, image:"🍤"}, {name:"Full Prawn Tandoori", price:580, image:"🍤"}, {name:"Mix Tandoori", price:600, image:"🍗"},
+        {name:"Egg Pulao", price:90, image:"🍛"}, {name:"Regular Bhuna Khichuri", price:120, image:"🍛"}, {name:"Roast Pulao", price:170, image:"🍛"}, {name:"Special Bhuna Khichuri", price:180, image:"🍛"}, {name:"Chingri Pulao", price:250, image:"🍛"}, {name:"Shahi Platter", price:270, image:"🍛"}, {name:"Chicken Akhni (1:2)", price:300, image:"🍛"}, {name:"Chicken Haleem with Roti (1:2)", price:300, image:"🍛"},
+        {name:"Pudding", price:250, image:"🍮"}, {name:"Fhirni", price:350, image:"🍮"}, {name:"Shahi Jorda", price:470, image:"🍮"},
+        {name:"Lassi", price:120, image:"🥤"}, {name:"Cold Coffee", price:140, image:"🥤"}, {name:"Chocolate Shake", price:150, image:"🥤"},
+        {name:"Shahi Kebab Wrap", price:100, image:"🌯"}, {name:"Falafel Wrap", price:150, image:"🌯"}, {name:"Cheesy Kebab Wrap", price:150, image:"🌯"}, {name:"Chicken Wrap", price:150, image:"🌯"}, {name:"Spicy Chicken Wrap", price:170, image:"🌯"}, {name:"Cheesy Chicken Wrap", price:190, image:"🌯"}, {name:"Mommy's Kitchen Special Wrap", price:220, image:"🌯"},
+        {name:"Potato Wedges", price:70, image:"🍟"}, {name:"French Fries", price:100, image:"🍟"}, {name:"Masala Wedges", price:130, image:"🍟"}, {name:"Chicken Popcorn", price:160, image:"🍗"}, {name:"Chicken Samosa (10pcs)", price:150, image:"🥟"}, {name:"Crispy Fried Chicken (2pcs)", price:160, image:"🍗"}, {name:"Cheesy Chicken Fingers (5pcs)", price:220, image:"🍗"}, {name:"Thai Fried Chicken (5pcs)", price:220, image:"🍗"}, {name:"BBQ Fried Chicken (2pcs)", price:220, image:"🍗"}, {name:"Crispy Wings (6pcs)", price:230, image:"🍗"}, {name:"BBQ Wings (6pcs)", price:240, image:"🍗"}, {name:"Nachos", price:250, image:"🌮"}, {name:"Tender Bites (6pcs)", price:250, image:"🍗"}, {name:"Sipsak Pizza (2pcs)", price:250, image:"🍕"}, {name:"Spicy Egg Balls (5pcs)", price:220, image:"🥚"}, {name:"Crispy Fried Prawn (5pcs)", price:250, image:"🍤"}, {name:"Cheese Prawn Roll (5pcs)", price:280, image:"🍤"}, {name:"Cheesy Spicy Meatball", price:280, image:"🥩"}, {name:"French Toast", price:250, image:"🍞"}, {name:"Pocket Pizza (4pcs)", price:350, image:"🍕"},
+        {name:"Meyonise", price:20, image:"🧂"}, {name:"Ketchup", price:20, image:"🧂"}, {name:"Cheese Slice", price:35, image:"🧀"}, {name:"Mozzarella cheese", price:250, image:"🧀"}, {name:"Mushroom", price:100, image:"🍄"}, {name:"Sausage", price:60, image:"🌭"}, {name:"Chicken", price:150, image:"🍗"}
+      ]},
+      
+      { id: 1, name: "Kabab Mahol", cat: "kacchi", items: [
+        {name:"Chocolate Cup Cake", price:40, image:"🧁"}, {name:"Butterscotch Cup Cake", price:40, image:"🧁"},
+        {name:"Lacchi", price:100, image:"🥤"}, {name:"Cold Coffee", price:100, image:"🥤"}, {name:"Strawberry Milk Shake", price:100, image:"🥤"},
+        {name:"Kabab Burger", price:100, image:"🍔"}, {name:"Sub Sandwich", price:100, image:"🥪"}, {name:"Kabab Cheese Burger", price:130, image:"🍔"}, {name:"Cheese Sub Sandwich", price:130, image:"🥪"}, {name:"Kabab Wrap", price:80, image:"🌯"},
+        {name:"Hasher Gosto", price:220, image:"🍗"}, {name:"Hasher Gosto Vuna Khichuri", price:200, image:"🍛"}, {name:"Chicken Haleem", price:60, image:"🍛"},
+        {name:"Chaler Ruti", price:10, image:"🍞"}, {name:"Porota", price:15, image:"🍞"}, {name:"Luchi", price:10, image:"🍞"}, {name:"Butter Naan", price:25, image:"🍞"},
+        {name:"Chocolate Pastry", price:100, image:"🍰"}, {name:"Butterscotch Pastry", price:100, image:"🍰"}, {name:"Blueberry Pastry", price:120, image:"🍰"}, {name:"Roshmalai Pastry", price:100, image:"🍰"}, {name:"Pudding", price:50, image:"🍮"},
+        {name:"Chicken Boti Kabab", price:70, image:"🍢"}, {name:"Chicken Hariyali Kabab", price:80, image:"🍢"}, {name:"Reshmi Kabab", price:100, image:"🍢"}, {name:"Malai Butter Kabab", price:150, image:"🍢"}, {name:"Chicken Jali Kabab", price:40, image:"🍢"}, {name:"Chicken Tandoori", price:120, image:"🍗"},
+        {name:"Chicken Momo", price:100, image:"🥟"}, {name:"Chicken Cheese Momo", price:130, image:"🥟"},
+        {name:"Chicken Shingara", price:80, image:"🥟"}, {name:"Chicken Shomucha", price:80, image:"🥟"}
+      ]},
+
+      { id: 2, name: "Sip & Slay Bistro", cat: "cafe", items: [
+        {name:"Lemon mint mojito", price:70, image:"🍹"}, {name:"Strawberry mojito", price:120, image:"🍹"}, {name:"Blue coconut rice bubble", price:200, image:"🥥"}, {name:"Iced latte", price:150, image:"☕"}, {name:"Regular cold coffee", price:100, image:"☕"},
+        {name:"Chicken momos with chilli oil dip (8pcs)", price:150, image:"🥟"}, {name:"Chicken nuggets (8-10 pcs)", price:180, image:"🍗"}, {name:"French fries", price:100, image:"🍟"}, {name:"Naga chicken patty burger", price:170, image:"🍔"}, {name:"Regular Chicken cheese burger", price:150, image:"🍔"}, {name:"Spicy pasta", price:180, image:"🍝"}, {name:"Chicken strips with dip (5 pcs)", price:100, image:"🍗"}, {name:"Meat box", price:180, image:"🥩"},
+        {name:"Seasonal fruit cake (1 Pound)", price:1000, image:"🍰"}
+      ]},
+
+      { id: 3, name: "Cafe Time Out", cat: "cafe", items: [
+        {name:"Espresso", price:120, image:"☕"}, {name:"Americano", price:150, image:"☕"}, {name:"Latte", price:199, image:"☕"}, {name:"Cappuccino", price:180, image:"☕"}, {name:"Mocha", price:240, image:"☕"}, {name:"Iced Americano", price:170, image:"☕"}, {name:"Iced Latte", price:220, image:"☕"}, {name:"Iced Cappuccino", price:230, image:"☕"}, {name:"Iced Mocha", price:250, image:"☕"}, {name:"Ice Tea", price:140, image:"🧊"}, {name:"Blue ocean", price:210, image:"🧊"}, {name:"Classic mojito", price:190, image:"🍹"}, {name:"Cosmopolitan", price:220, image:"🍹"}, {name:"Coconut margarita", price:210, image:"🍹"}, {name:"Margarita", price:160, image:"🍹"},
+        {name:"Cold Coffee", price:200, image:"☕"}, {name:"Orio Shake", price:210, image:"🥤"}, {name:"Lacchi", price:160, image:"🥤"}, {name:"Milk Shake", price:150, image:"🥤"}, {name:"Chocolate Shake", price:180, image:"🥤"},
+        {name:"Cream of mushroom soup", price:290, image:"🍲"}, {name:"Creamy chicken mushroom soup", price:360, image:"🍲"}, {name:"Thai soup", price:220, image:"🍲"}, {name:"Clear vegetables soup", price:199, image:"🍲"},
+        {name:"Apple chicken cashew nut salad", price:380, image:"🥗"}, {name:"Chicken cashew nut salad", price:299, image:"🥗"}, {name:"Chicken sausage salad", price:190, image:"🥗"}, {name:"Grilled chicken salad", price:290, image:"🥗"},
+        {name:"Chicken pepperoni pizza 8inch", price:450, image:"🍕"}, {name:"Chicken pepperoni pizza 10inch", price:530, image:"🍕"}, {name:"Chicken pepperoni pizza 12inch", price:699, image:"🍕"},
+        {name:"Meat lover pizza 8inch", price:480, image:"🍕"}, {name:"Meat lover pizza 10inch", price:550, image:"🍕"}, {name:"Meat lover pizza 12inch", price:720, image:"🍕"},
+        {name:"Alfredo pizza 8inch", price:490, image:"🍕"}, {name:"Alfredo pizza 10inch", price:590, image:"🍕"}, {name:"Alfredo pizza 12inch", price:750, image:"🍕"},
+        {name:"BBQ pizza 8inch", price:450, image:"🍕"}, {name:"BBQ pizza 10inch", price:550, image:"🍕"}, {name:"BBQ pizza 12inch", price:650, image:"🍕"},
+        {name:"Mushroom pizza 8inch", price:499, image:"🍕"}, {name:"Mushroom pizza 10inch", price:599, image:"🍕"}, {name:"Mushroom pizza 12inch", price:780, image:"🍕"},
+        {name:"Mexican pizza 8inch", price:499, image:"🍕"}, {name:"Mexican pizza 10inch", price:650, image:"🍕"}, {name:"Mexican pizza 12inch", price:790, image:"🍕"},
+        {name:"Chicken tikka masala pizza 8inch", price:499, image:"🍕"}, {name:"Chicken tikka masala pizza 10inch", price:550, image:"🍕"}, {name:"Chicken tikka masala pizza 12inch", price:720, image:"🍕"},
+        {name:"Weight up chicken", price:290, image:"🍗"}, {name:"Chicken Stick", price:299, image:"🍗"}, {name:"Peri peri chicken", price:320, image:"🍗"}, {name:"Thai Fried chicken platter", price:280, image:"🍗"}, {name:"Ginger chicken platter", price:280, image:"🍗"}, {name:"Student Platter", price:180, image:"🍗"}, {name:"Chicken Masala Curry", price:210, image:"🍗"}, {name:"Naga Platter", price:210, image:"🍗"}, {name:"BBQ Chicken", price:250, image:"🍗"}, {name:"Tandoori Platter", price:250, image:"🍗"},
+        {name:"Crispy Rice Bowl", price:150, image:"🍚"}, {name:"BBQ Rice Bowl", price:199, image:"🍚"}, {name:"Mexican rice bowl", price:199, image:"🍚"}, {name:"Manchurian rice bowl", price:199, image:"🍚"}, {name:"Seafish rice bowl", price:220, image:"🍚"}, {name:"Chili chicken rice bowl", price:199, image:"🍚"},
+        {name:"Korai pasta", price:220, image:"🍝"}, {name:"Naga pasta", price:250, image:"🍝"}, {name:"All Arrabbiata Chicken pasta", price:320, image:"🍝"}, {name:"Fettuccine Alfredo Chicken pasta", price:350, image:"🍝"}, {name:"Oven baked chicken pasta", price:270, image:"🍝"},
+        {name:"Chicken chow mein", price:199, image:"🍜"}, {name:"Seafood mix chow mein", price:290, image:"🍜"}, {name:"Eggs chow mein", price:190, image:"🍜"}, {name:"Mix vegetables chow mein", price:160, image:"🍜"}, {name:"Thai mix chow mein", price:399, image:"🍜"},
+        {name:"French Fry", price:99, image:"🍟"}, {name:"Wedges", price:110, image:"🍟"}, {name:"Spicy Garlic mushroom", price:280, image:"🍄"}, {name:"Chicken strips", price:280, image:"🍗"}, {name:"Chicken Nachos", price:250, image:"🌮"}, {name:"BBQ wings 6p", price:350, image:"🍗"}, {name:"Thai Fried Chicken 6p", price:380, image:"🍗"}, {name:"Fried Calamari", price:290, image:"🦑"}, {name:"Chicken Meatbox", price:230, image:"🥩"},
+        {name:"Chicken Sub Sandwich", price:170, image:"🥪"}, {name:"BBQ Sub Sandwich", price:199, image:"🥪"}, {name:"Naga Sub Sandwich", price:170, image:"🥪"}, {name:"BBQ Burger", price:250, image:"🍔"}, {name:"Naga Burger", price:220, image:"🍔"}, {name:"Crispy Chicken burger", price:210, image:"🍔"}, {name:"Juicy Lucy Chicken burger", price:280, image:"🍔"}, {name:"Classic Chicken burger", price:250, image:"🍔"}, {name:"Grilled Chicken burger", price:299, image:"🍔"}, {name:"Chicken Cheese blast burger", price:299, image:"🍔"}
+      ]},
+      
+      { id: 4, name: "Kacchi Ghor", cat: "kacchi", items: [
+        {name:"Matin Chui Jhal (Sada Bhat + Daal)", price:270, image:"🍛"}, {name:"Sarisha Ilish (Sada Bhat + Daal)", price:320, image:"🍛"}, {name:"Sarisha Chingri (Sada Bhat + Daal)", price:290, image:"🍛"},
+        {name:"Dal Bhuna", price:65, image:"🍛"}, {name:"Alur Bhuna", price:65, image:"🍛"}, {name:"Tomato Bhuna", price:65, image:"🍛"}, {name:"Begun Bhuna", price:65, image:"🍛"}, {name:"Daal (Plate)", price:50, image:"🍛"},
+        {name:"Mach Bhuna", price:20, image:"🍛"}, {name:"Dim Bhuna", price:20, image:"🍛"}, {name:"Chingri Bhuna", price:20, image:"🍛"}, {name:"Shutir Bhuna", price:80, image:"🍛"}, {name:"Sada Bhat", price:70, image:"🍛"},
+        {name:"Chicken Masala (Regular) + Rice", price:300, image:"🍛"}, {name:"Koi Mach + Rice", price:350, image:"🍛"}, {name:"Ilish Bhuna + Rice", price:290, image:"🍛"},
+        {name:"Mutton Kacchi (Basmati)", price:300, image:"🍗"}, {name:"Mutton Leg Kacchi (Basmati)", price:400, image:"🍗"}, {name:"Chicken Kacchi (Basmati)", price:250, image:"🍗"}, {name:"Chicken Biryani (Chinigura)", price:180, image:"🍗"}, {name:"Mutton Chaap Polaw", price:200, image:"🍛"}, {name:"Mutton Tehari (Chinigura)", price:180, image:"🍛"},
+        {name:"Burhani (500ml)", price:110, image:"🥤"}, {name:"Burhani (1Ltr)", price:210, image:"🥤"}, {name:"Jorda", price:50, image:"🍮"}, {name:"Firni", price:50, image:"🍮"}, {name:"Doi", price:50, image:"🍮"},
+        {name:"Mutton Kacchi (Basmati) 2P", price:750, image:"🍗"}, {name:"Mutton Kacchi (Basmati) 4P", price:1480, image:"🍗"}, {name:"Mutton Kacchi (Basmati) 6P", price:2200, image:"🍗"},
+        {name:"Mutton Kacchi (Basmati+Special) 2P", price:950, image:"🍗"}, {name:"Mutton Kacchi (Basmati+Special) 4P", price:1880, image:"🍗"}, {name:"Mutton Kacchi (Basmati+Special) 6P", price:2800, image:"🍗"},
+        {name:"Bashmati Rice", price:100, image:"🍚"}, {name:"Plain Polaw", price:60, image:"🍚"}, {name:"Mutton (Addon)", price:120, image:"🍗"}, {name:"Jali Kabab", price:50, image:"🍢"}, {name:"Egg", price:20, image:"🥚"}
+      ]},
+
+      { id: 5, name: "Hungry Hut", cat: "burger", items: [
+        {name:"Crispy Fried Chicken (1pc)", price:90, image:"🍗"}, {name:"Spicy Fried Chicken (1pc)", price:100, image:"🍗"}, {name:"Thai Fried Chicken", price:170, image:"🍗"}, {name:"Chicken Lollipop (4pcs)", price:200, image:"🍗"}, {name:"BBQ Wings (6pcs)", price:200, image:"🍗"}, {name:"French Fry", price:70, image:"🍟"}, {name:"Potato Wedges", price:80, image:"🍟"}, {name:"Fish & Chips", price:150, image:"🐟"},
+        {name:"Chicken Sub Sandwich", price:100, image:"🥪"}, {name:"Chicken Cheese Sandwich", price:150, image:"🥪"}, {name:"Chicken Naga Sandwich", price:120, image:"🥪"},
+        {name:"Wonton (4pcs)", price:80, image:"🥟"}, {name:"Nachos", price:200, image:"🌮"}, {name:"Chilli Nachos", price:250, image:"🌮"},
+        {name:"Thai Soup (1:1)", price:120, image:"🍲"}, {name:"Thai Soup (1:3)", price:300, image:"🍲"}, {name:"Chicken Corn Soup (1:1)", price:110, image:"🍲"}, {name:"Cream of Mushroom Soup (1:1)", price:150, image:"🍲"},
+        {name:"Fried Momo (6pcs)", price:140, image:"🥟"}, {name:"BBQ Momo (6pcs)", price:160, image:"🥟"}, {name:"Spicy Sauce Momo (6pcs)", price:170, image:"🥟"}, {name:"Juicy Cheese Momo (6pcs)", price:200, image:"🥟"},
+        {name:"Chicken Patty Burger", price:120, image:"🍔"}, {name:"Chicken Cheese Burger", price:150, image:"🍔"}, {name:"Crispy Chicken Burger", price:150, image:"🍔"}, {name:"Sausage Burger", price:200, image:"🍔"}, {name:"Crispy Chicken Cheese Burger", price:180, image:"🍔"}, {name:"Chicken Mushroom Burger", price:180, image:"🍔"}, {name:"Mini Chicken Burger", price:80, image:"🍔"}, {name:"Hungry Hut Special Burger", price:250, image:"🍔"},
+        {name:"Thai Chicken Salad", price:200, image:"🥗"}, {name:"Coleslaw Salad", price:200, image:"🥗"}, {name:"Mix Salad", price:200, image:"🥗"},
+        {name:"Chicken Sizzling (1:1)", price:250, image:"🍲"}, {name:"Chicken Sizzling (1:3)", price:400, image:"🍲"},
+        {name:"Chicken Curry (1:1)", price:150, image:"🍛"}, {name:"Peen Masala Curry (1:1)", price:190, image:"🍛"}, {name:"Chicken Chili Onion", price:220, image:"🍛"},
+        {name:"Fried Rice (1:1)", price:100, image:"🍚"}, {name:"Fried Rice (1:3)", price:250, image:"🍚"}, {name:"Naga Fried Rice (1:1)", price:130, image:"🍚"},
+        {name:"Sauce", price:20, image:"🧂"}, {name:"Cheese Slice", price:50, image:"🧀"},
+        {name:"Chocolate Milkshake", price:140, image:"🥤"}, {name:"Vanilla Milkshake", price:140, image:"🥤"}, {name:"Strawberry Milkshake", price:160, image:"🥤"}, {name:"Lacchi", price:180, image:"🥤"}, {name:"Kitkat Shake", price:220, image:"🥤"},
+        {name:"Hot Coffee", price:80, image:"☕"}, {name:"Cold Coffee", price:100, image:"☕"}, {name:"Chocolate Cold Coffee", price:120, image:"☕"},
+        {name:"Lemon Juice", price:80, image:"🍹"}, {name:"Spicy Lemon Juice", price:70, image:"🍹"},
+        {name:"Regular Fuska (10pcs)", price:50, image:"🍢"}, {name:"Naga Fuska (10pcs)", price:80, image:"🍢"}, {name:"Doi Fuska (10pcs)", price:150, image:"🍢"},
+        {name:"Chicken Pizza 8inch", price:250, image:"🍕"}, {name:"Chicken Pizza 10inch", price:350, image:"🍕"}, {name:"Chicken Pizza 12inch", price:450, image:"🍕"}, {name:"BBQ Chicken Pizza 8inch", price:280, image:"🍕"}, {name:"BBQ Chicken Pizza 10inch", price:380, image:"🍕"}, {name:"BBQ Chicken Pizza 12inch", price:480, image:"🍕"},
+        {name:"Combo 1 (Burger+Fries+Drinks)", price:250, image:"🍱"}, {name:"Combo 2 (Chicken Fry+Drinks)", price:250, image:"🍱"}
+      ]},
+      
+      { id: 6, name: "Cafe Dua", cat: "cafe", items: [
+        {name:"Orange Mojito", price:100, image:"🍹"}, {name:"Lemon Mojito", price:100, image:"🍹"}, {name:"Mango Mojito", price:100, image:"🍹"}, {name:"Strawberry Mojito", price:100, image:"🍹"}, {name:"Blueberry Mojito", price:100, image:"🍹"}, {name:"Blue Ocean Mojito", price:100, image:"🍹"},
+        {name:"Banana Lassi", price:100, image:"🥤"}, {name:"Mango Lassi", price:100, image:"🥤"}, {name:"Regular Lassi", price:100, image:"🥤"},
+        {name:"Banana Smoothie", price:120, image:"🥤"}, {name:"Mango Smoothie", price:120, image:"🥤"}, {name:"Strawberry Smoothie", price:120, image:"🥤"}, {name:"Blueberry Smoothie", price:120, image:"🥤"}, {name:"Butterscotch Shake", price:150, image:"🥤"}, {name:"Oreo Shake", price:150, image:"🥤"}, {name:"Chocolate Milkshake", price:150, image:"🥤"}, {name:"Kitkat Shake", price:170, image:"🥤"},
+        {name:"Chocolate Cold Coffee", price:120, image:"☕"}, {name:"Special Tea", price:40, image:"☕"}, {name:"Ice Tea", price:60, image:"☕"}, {name:"Black Coffee", price:60, image:"☕"}, {name:"Hot Coffee", price:90, image:"☕"}, {name:"Cafe Latte", price:100, image:"☕"}, {name:"Caramel Cold Coffee", price:160, image:"☕"}, {name:"Vanilla Cold Coffee", price:160, image:"☕"}, {name:"Boba Tea", price:150, image:"☕"},
+        {name:"Mint Lemon Juice", price:50, image:"🍹"}, {name:"Seasonal Fruit Juice", price:70, image:"🍹"},
+        {name:"Add Boba", price:30, image:"🧋"},
+        {name:"Special Fuchka", price:100, image:"🍢"}, {name:"Doi Fuchka", price:100, image:"🍢"},
+        {name:"Chicken Patty Burger", price:150, image:"🍔"}, {name:"Chicken Naga Burger", price:160, image:"🍔"}, {name:"Crispy Chicken Burger", price:160, image:"🍔"}, {name:"Cheese Chicken Burger", price:180, image:"🍔"}, {name:"BBQ Chicken Burger", price:190, image:"🍔"},
+        {name:"Chicken Chowmein", price:180, image:"🍜"}, {name:"Spicy Naga Chicken Chowmein", price:200, image:"🍜"},
+        {name:"Regular Momo (6pcs)", price:130, image:"🥟"}, {name:"Naga Momo (6pcs)", price:130, image:"🥟"}, {name:"Cheese Momo (6pcs)", price:150, image:"🥟"}, {name:"BBQ Fried Momo (6pcs)", price:160, image:"🥟"},
+        {name:"Potato Wedges", price:70, image:"🍟"}, {name:"Singara", price:70, image:"🥟"}, {name:"Crispy Fried Chicken", price:80, image:"🍗"}, {name:"French Fry", price:100, image:"🍟"}, {name:"Chicken Strips", price:150, image:"🍗"}, {name:"BBQ Naga Wings (6pcs)", price:170, image:"🍗"}, {name:"Chicken Crispy Wings (6pcs)", price:170, image:"🍗"}, {name:"Popcorn Chicken", price:180, image:"🍗"}, {name:"Chicken Nuggets (6pcs)", price:150, image:"🍗"}, {name:"Meat Box", price:230, image:"🥩"}, {name:"Special Meat Box", price:280, image:"🥩"},
+        {name:"Grilled Egg Sandwich", price:100, image:"🥪"}, {name:"BBQ Chicken Wrap", price:180, image:"🌯"}, {name:"Spicy Naga Chicken Wrap", price:190, image:"🌯"}, {name:"Club Sandwich", price:200, image:"🥪"}, {name:"Cheese Club Sandwich", price:220, image:"🥪"}, {name:"BBQ Chicken Sandwich", price:210, image:"🥪"},
+        {name:"Combo 1 (Chicken Patty Burger+Fries+Lemon Juice)", price:250, image:"🍱"}, {name:"Combo 2 (Club Sandwich+Chocolate Cold Coffee)", price:350, image:"🍱"}, {name:"Combo 3 (Chicken Fry+Wedges+Lassi)", price:380, image:"🍱"}, {name:"Combo 4 (Crispy Wings+Chocolate Cold Coffee)", price:390, image:"🍱"}
+      ]},
+      
+      { id: 7, name: "MBB", cat: "burger", items: [
+        {name:"Regular Meatbox", price:120, image:"🥩"}, {name:"Naga Meatbox", price:140, image:"🥩"}, {name:"BBQ Meatbox", price:170, image:"🥩"}, {name:"Cheese Meatbox", price:200, image:"🥩"}, {name:"Mushroom Meatbox", price:250, image:"🥩"}, {name:"MBB Special Meatbox", price:300, image:"🥩"},
+        {name:"Old School Mini", price:60, image:"🍔"}, {name:"The Heat Seeker", price:80, image:"🍔"}, {name:"The Crunchmaster", price:120, image:"🍔"}, {name:"The Cheese Master", price:160, image:"🍔"}, {name:"Cheese Master Special", price:180, image:"🍔"}, {name:"BBQ Burger", price:150, image:"🍔"}, {name:"BBQ Special Burger", price:180, image:"🍔"}, {name:"MBB Special Burger", price:250, image:"🍔"},
+        {name:"Paratha Shawarma", price:110, image:"🌯"}, {name:"Naga Shawarma", price:130, image:"🌯"}, {name:"Paratha Cheese Shawarma", price:150, image:"🌯"}, {name:"Chicken Shawarma", price:140, image:"🌯"}, {name:"Naga Shawarma (Naans)", price:170, image:"🌯"}, {name:"Cheese Shawarma", price:170, image:"🌯"},
+        {name:"Crispy Chicken Rice Bowl", price:120, image:"🍚"}, {name:"Crispy Wings Rice Bowl", price:120, image:"🍚"}, {name:"BBQ Wings Rice Bowl", price:130, image:"🍚"}, {name:"Chicken Katsu Rice Bowl", price:160, image:"🍚"},
+        {name:"Hot Dog Regular", price:70, image:"🌭"}, {name:"Cheese Hot Dog", price:90, image:"🌭"},
+        {name:"French Fry", price:60, image:"🍟"}, {name:"Chicken Fry", price:70, image:"🍗"}, {name:"Crispy Wings (6pcs)", price:130, image:"🍗"}, {name:"BBQ Wings (6pcs)", price:150, image:"🍗"}, {name:"Chicken Popcorn", price:160, image:"🍗"}, {name:"Chicken Strip", price:150, image:"🍗"}, {name:"Nachos", price:180, image:"🌮"}, {name:"MBB Special Nachos", price:230, image:"🌮"},
+        {name:"Lemon Mint Mojito", price:60, image:"🍹"}, {name:"Pulse Mojito", price:80, image:"🍹"}, {name:"Blue Lagoon Mojito", price:100, image:"🍹"}, {name:"Milk Shake", price:120, image:"🥤"}, {name:"Banana Shake", price:120, image:"🥤"}, {name:"Mango Shake", price:130, image:"🥤"}, {name:"Chocolate Shake", price:150, image:"🥤"}, {name:"Oreo Shake", price:160, image:"🥤"}, {name:"Kitkat Shake", price:180, image:"🥤"}, {name:"Classic Cold Coffee", price:120, image:"☕"}, {name:"Cold Coffee with Ice Cream", price:150, image:"☕"}, {name:"Chocolate Cold Coffee", price:150, image:"☕"}, {name:"Iced Cold Coffee", price:170, image:"☕"}, {name:"Mango Juice", price:100, image:"🍹"}, {name:"Orange Juice", price:100, image:"🍹"}, {name:"Watermelon Juice", price:100, image:"🍹"}
+      ]},
+      
+      { id: 8, name: "Chill N Fill", cat: "cafe", items: [
+        {name:"Chicken Patty Burger", price:150, image:"🍔"}, {name:"Crispy Chicken Burger", price:170, image:"🍔"}, {name:"Chicken Cheese Burger", price:200, image:"🍔"},
+        {name:"Combo 1 (Burger+Fries+Drinks)", price:210, image:"🍱"}, {name:"Combo 2 (Burger+Fries+Drinks)", price:230, image:"🍱"}, {name:"Combo 3 (Burger+Fries+Drinks)", price:300, image:"🍱"},
+        {name:"Chicken Shawarma", price:150, image:"🌯"}, {name:"Chicken BBQ Shawarma", price:170, image:"🌯"},
+        {name:"Extra Cheese", price:30, image:"🧀"},
+        {name:"Chicken Meat Box", price:220, image:"🥩"}, {name:"Chicken Naga Meat Box", price:240, image:"🥩"},
+        {name:"French Fries", price:120, image:"🍟"}, {name:"Fried Chicken", price:120, image:"🍗"}, {name:"Hot Wings (6pcs)", price:280, image:"🍗"}, {name:"Chicken Lollipops (6pcs)", price:280, image:"🍗"}, {name:"Chicken Strips (6pcs)", price:300, image:"🍗"}, {name:"Pop Chicken (6pcs)", price:250, image:"🍗"}, {name:"Chicken Wontons (6pcs)", price:180, image:"🥟"}, {name:"Nachos", price:250, image:"🌮"}, {name:"Fried Chicken Bucket (8pcs)", price:900, image:"🍗"},
+        {name:"Chicken Pizza 8inch", price:450, image:"🍕"}, {name:"Chicken Pizza 10inch", price:550, image:"🍕"}, {name:"Chicken Pizza 12inch", price:650, image:"🍕"}, {name:"Chicken BBQ Pizza 8inch", price:480, image:"🍕"}, {name:"Chicken BBQ Pizza 10inch", price:580, image:"🍕"}, {name:"Chicken BBQ Pizza 12inch", price:700, image:"🍕"}, {name:"Chef Special Pizza 8inch", price:520, image:"🍕"}, {name:"Chef Special Pizza 10inch", price:620, image:"🍕"}, {name:"Chef Special Pizza 12inch", price:750, image:"🍕"},
+        {name:"Chicken Chowmein (1:2)", price:250, image:"🍜"}, {name:"Chicken Chowmein (1:3)", price:350, image:"🍜"}, {name:"Vegetable Chowmein (1:2)", price:200, image:"🍜"}, {name:"Vegetable Chowmein (1:3)", price:270, image:"🍜"}, {name:"Special Chowmein (1:2)", price:300, image:"🍜"}, {name:"Special Chowmein (1:3)", price:450, image:"🍜"},
+        {name:"Oven Baked Pasta", price:280, image:"🍝"}
+      ]},
+      
+      { id: 9, name: "Food Squad", cat: "burger", items: [
+        {name:"Crispy Fried Chicken (6pcs mini)", price:170, image:"🍗"}, {name:"Spicy Fried Chicken (6pcs mini)", price:199, image:"🍗"}, {name:"Pop Chicken (10 pcs)", price:130, image:"🍗"}, {name:"Chicken Strips (10 pcs)", price:149, image:"🍗"}, {name:"Chicken Shaslik (3pcs)", price:149, image:"🍗"}, {name:"Potato Wedges (10pcs)", price:99, image:"🍟"}, {name:"Cheese French Fry", price:139, image:"🍟"}, {name:"French Fry", price:99, image:"🍟"}, {name:"Loaded French Fries", price:220, image:"🍟"}, {name:"Wonton (8ps)", price:120, image:"🥟"},
+        {name:"BBQ Chicken Cheese Burger", price:160, image:"🍔"}, {name:"Chicken Cheese Burger", price:140, image:"🍔"}, {name:"Crispy Chicken Cheese Burger", price:150, image:"🍔"}, {name:"Naga King Burger", price:150, image:"🍔"}, {name:"American Burger", price:230, image:"🍔"},
+        {name:"Chicken Club Sandwich", price:140, image:"🥪"}, {name:"American Crispy Club Sandwich", price:239, image:"🥪"}, {name:"Crispy Cheese Sub", price:150, image:"🥪"},
+        {name:"Thai Soup with Wonton (3ps)", price:150, image:"🍲"},
+        {name:"Italian Cheese Pasta", price:220, image:"🍝"}, {name:"Oven Baked Pasta", price:249, image:"🍝"},
+        {name:"Platter 1 (Fried Rice+Crispy Chicken+Vegetable)", price:180, image:"🍱"}, {name:"Platter 2 (Fried Rice+Chicken Cutlet+Shaslik+Vegetable)", price:250, image:"🍱"}, {name:"Platter 3 (Fried Rice+BBQ Chicken+Coleslaw)", price:270, image:"🍱"}, {name:"Platter 4 (Fried Rice+Chicken Jhal Fry+Vegetable)", price:230, image:"🍱"}, {name:"Platter Zero (Special)", price:250, image:"🍱"},
+        {name:"Chocolate Milk Shake", price:110, image:"🥤"}, {name:"Oreo Milk Shake", price:130, image:"🥤"}, {name:"Kitkat Milk Shake", price:140, image:"🥤"}, {name:"Chocolate Cold Coffee", price:120, image:"☕"}, {name:"Blue Mint", price:80, image:"🥤"}, {name:"Lassi", price:120, image:"🥤"}, {name:"Soft Drinks", price:20, image:"🥤"},
+        {name:"Polao Platter (Polao+Chicken Roast+Kabab+Salad)", price:240, image:"🍱"}, {name:"Polao Platter 2 (Polao+Egg Kurma+Pakora+Salad)", price:190, image:"🍱"}, {name:"Hyderabadi Biryani Platter (Biryani+Chicken Kabab+Salad)", price:280, image:"🍱"},
+        {name:"Chicken Chowmein", price:129, image:"🍜"}, {name:"Egg Chowmein", price:110, image:"🍜"},
+        {name:"Food Squad Special Nachos", price:140, image:"🌮"},
+        {name:"Crispy Rice Bowl", price:119, image:"🍚"}, {name:"BBQ Rice Bowl", price:139, image:"🍚"}, {name:"Chicken Cheese Cutlet Rice Bowl", price:189, image:"🍚"},
+        {name:"BBQ Pizza 8inch", price:450, image:"🍕"}, {name:"BBQ Pizza 12inch", price:600, image:"🍕"}, {name:"Home Special Pizza 8inch", price:520, image:"🍕"}, {name:"Home Special Pizza 12inch", price:800, image:"🍕"}
+      ]},
+      
+      { id: 10, name: "Flaming Dine", cat: "pizza", items: [
+        {name:"Chicken Steak Platter", price:450, image:"🍗"}, {name:"Szechuan Platter", price:320, image:"🍗"}, {name:"BBQ Grilled Chicken Platter", price:390, image:"🍗"}, {name:"Honey Mustard Grilled Chicken Platter", price:390, image:"🍗"},
+        {name:"Chicken Dominator Pizza 8inch", price:420, image:"🍕"}, {name:"Chicken Dominator Pizza 10inch", price:500, image:"🍕"}, {name:"Chicken Dominator Pizza 12inch", price:720, image:"🍕"},
+        {name:"BBQ Pizza 8inch", price:460, image:"🍕"}, {name:"BBQ Pizza 10inch", price:590, image:"🍕"}, {name:"BBQ Pizza 12inch", price:780, image:"🍕"},
+        {name:"Sausage Carnival Pizza 8inch", price:480, image:"🍕"}, {name:"Sausage Carnival Pizza 10inch", price:620, image:"🍕"}, {name:"Sausage Carnival Pizza 12inch", price:800, image:"🍕"},
+        {name:"Chicken Salami Pizza (12inch)", price:860, image:"🍕"}, {name:"Four Seasons Pizza (12inch)", price:850, image:"🍕"}, {name:"Flaming Special Pizza (12inch)", price:880, image:"🍕"},
+        {name:"Chicken Cashew Nut Salad", price:390, image:"🥗"}, {name:"Chicken Green Salad", price:290, image:"🥗"},
+        {name:"Chicken Biryani", price:250, image:"🍛"},
+        {name:"Hot Coffee", price:100, image:"☕"}, {name:"Cold Coffee", price:120, image:"☕"}, {name:"Chocolate Cold Coffee", price:190, image:"☕"}, {name:"Chocolate Overloaded", price:290, image:"🥤"}, {name:"Chocolate Milk Shake", price:170, image:"🥤"}, {name:"Vanilla Milkshake", price:170, image:"🥤"}, {name:"Mint Lemonade", price:90, image:"🍹"}, {name:"Ice Lemonade", price:90, image:"🍹"}, {name:"Soft Drinks", price:30, image:"🥤"},
+        {name:"Fried Rice (1:1)", price:100, image:"🍚"}, {name:"BBQ Chicken 1 pc", price:90, image:"🍗"}, {name:"Masala Chicken", price:140, image:"🍗"}, {name:"Butter Naan 1 pc", price:60, image:"🍞"}, {name:"Mixed Vegetable (1:1)", price:50, image:"🥗"}, {name:"Coleslaw Salad (1:1)", price:50, image:"🥗"}, {name:"Burger Sauce", price:20, image:"🧂"}, {name:"Mayonnaise", price:20, image:"🧂"},
+        {name:"French Fries", price:140, image:"🍟"}, {name:"Potato Wedges", price:120, image:"🍟"}, {name:"Crispy Wings (4 Pcs)", price:190, image:"🍗"}, {name:"Naga Wings (4 Pcs)", price:190, image:"🍗"}, {name:"BBQ Wings (4 Pcs)", price:200, image:"🍗"}, {name:"Pop Chicken (with bone)", price:220, image:"🍗"}, {name:"Nachos", price:230, image:"🌮"}, {name:"Tower Nachos", price:290, image:"🌮"}, {name:"Crispy Fried Chicken (1 Pc)", price:130, image:"🍗"}, {name:"Thai Fried Chicken (1 Pc)", price:130, image:"🍗"}, {name:"Meat Box", price:230, image:"🥩"}, {name:"BBQ Meat Box", price:240, image:"🥩"},
+        {name:"Thai Soup (1:1)", price:170, image:"🍲"}, {name:"Thai Soup (1:3)", price:400, image:"🍲"}, {name:"Wonton (2 Pcs)", price:60, image:"🥟"}, {name:"Wonton (6 Pcs)", price:160, image:"🥟"},
+        {name:"Chicken Sub Sandwich", price:180, image:"🥪"}, {name:"BBQ Chicken Sub Sandwich", price:200, image:"🥪"},
+        {name:"Crispy Chicken Burger", price:180, image:"🍔"}, {name:"Classic Chicken Burger", price:220, image:"🍔"}, {name:"BBQ Chicken Burger", price:220, image:"🍔"}, {name:"Chicken Naga Burger", price:220, image:"🍔"}, {name:"Classic Chicken Cheese Burger", price:260, image:"🍔"}, {name:"BBQ Chicken Cheese Burger", price:260, image:"🍔"}, {name:"Chicken Double Delight Burger", price:360, image:"🍔"},
+        {name:"Chicken Chowmein (1:1)", price:170, image:"🍜"}, {name:"Chicken Chowmein (1:3)", price:380, image:"🍜"}, {name:"Vegetable Chowmein (1:1)", price:150, image:"🍜"}, {name:"Vegetable Chowmein (1:3)", price:330, image:"🍜"},
+        {name:"Oven Baked Pasta", price:290, image:"🍝"}, {name:"Oven Baked Naga Pasta", price:270, image:"🍝"}, {name:"White Sauce Pasta", price:230, image:"🍝"}, {name:"Red Sauce Pasta", price:190, image:"🍝"}
+      ]},
+      
+      { id: 11, name: "Black Pepper", cat: "drinks", items: [
+        {name:"Strawberry Mojito", price:120, image:"🍹"}, {name:"Orange Mojito", price:120, image:"🍹"}, {name:"Blueberry Mojito", price:120, image:"🍹"}, {name:"Blue Ocean Mojito", price:120, image:"🍹"}, {name:"Mango Mojito", price:120, image:"🍹"}, {name:"Lemon Mojito", price:120, image:"🍹"},
+        {name:"Salt Lassi", price:100, image:"🥤"}, {name:"Mango Lassi", price:120, image:"🥤"}, {name:"Banana Lassi", price:120, image:"🥤"}, {name:"Regular Lassi", price:100, image:"🥤"}, {name:"Nut Lassi", price:150, image:"🥤"},
+        {name:"Strawberry Shake", price:150, image:"🥤"}, {name:"Blueberry Shake", price:150, image:"🥤"}, {name:"Mango Shake", price:150, image:"🥤"}, {name:"Banana Shake", price:150, image:"🥤"}, {name:"Oreo Milk Shake", price:160, image:"🥤"}, {name:"Butterscotch Shake", price:170, image:"🥤"}, {name:"Milk Nut Shake", price:170, image:"🥤"}, {name:"Chocolate Shake", price:150, image:"🥤"}, {name:"Caramel Shake", price:160, image:"🥤"}, {name:"Mint Milk Shake", price:150, image:"🥤"}, {name:"Kitkat Shake", price:190, image:"🥤"},
+        {name:"Coffee Latte", price:150, image:"☕"}, {name:"Cold Coffee", price:120, image:"☕"}, {name:"Brazilian Lemonade", price:100, image:"🍹"}, {name:"Hot Coffee", price:90, image:"☕"}, {name:"Black Coffee", price:70, image:"☕"}, {name:"Ice Tea", price:60, image:"🧊"}, {name:"Tea", price:40, image:"☕"}, {name:"Lemon Mint", price:40, image:"🍹"},
+        {name:"Regular Boba", price:50, image:"🧋"}, {name:"Boba Tea", price:150, image:"🧋"}, {name:"Strawberry Boba", price:250, image:"🧋"}, {name:"Blueberry Boba", price:250, image:"🧋"}, {name:"Mango Boba", price:250, image:"🧋"}, {name:"Banana Boba", price:200, image:"🧋"}, {name:"Oreo Boba", price:210, image:"🧋"}, {name:"Butterscotch Boba", price:270, image:"🧋"}, {name:"Milk Nut Boba", price:250, image:"🧋"}, {name:"Chocolate Boba", price:200, image:"🧋"}, {name:"Caramel Boba", price:210, image:"🧋"}, {name:"Kitkat Boba", price:250, image:"🧋"}
+      ]},
+      
+      { id: 12, name: "Rosoi Ghor", cat: "pizza", items: [
+        {name:"Chicken Fajita Pizza 8inch", price:1050, image:"🍕"}, {name:"Chicken Fajita Pizza 10inch", price:1300, image:"🍕"}, {name:"Chicken Fajita Pizza 12inch", price:1420, image:"🍕"},
+        {name:"Rosoi Ghor Special BBQ Chicken Pan Pizza 8inch", price:1150, image:"🍕"}, {name:"Rosoi Ghor Special BBQ Chicken Pan Pizza 10inch", price:1400, image:"🍕"}, {name:"Rosoi Ghor Special BBQ Chicken Pan Pizza 12inch", price:1520, image:"🍕"},
+        {name:"Chef Signature Chicken Pizza 10inch", price:850, image:"🍕"}, {name:"Chef Signature Chicken Pizza 12inch", price:950, image:"🍕"}, {name:"Vegetable Pizza 10inch", price:800, image:"🍕"},
+        {name:"Rosoi Ghor Special Crispy Garlic Pizza 8inch", price:780, image:"🍕"}, {name:"Rosoi Ghor Special Crispy Garlic Pizza 10inch", price:850, image:"🍕"}, {name:"Rosoi Ghor Special Crispy Garlic Pizza 12inch", price:1050, image:"🍕"},
+        {name:"Set Menu 1 (Egg Fried Rice+Chicken Fry+Vegetable+Salad)", price:270, image:"🍱"}, {name:"Set Menu 2 (Chicken Fried Rice+Chicken Masala+Chicken Fry+Salad+Drinks)", price:350, image:"🍱"}, {name:"Set Menu 3 (Prawn Fried Rice+Schezwan Fry+Vegetable+Salad+Drinks)", price:380, image:"🍱"}, {name:"Set Menu 4 (Rosoi Ghor Special Fried Rice+Crispy Fry+Prawn Masala+Salad+Drinks)", price:400, image:"🍱"}, {name:"Rice bowl", price:200, image:"🍚"}, {name:"Popcorn rice bowl", price:220, image:"🍚"},
+        {name:"Chicken Wonton (6 pcs)", price:220, image:"🥟"}, {name:"Fried Prawn (8 pcs)", price:350, image:"🍤"}, {name:"Chicken Spring Roll (8 pcs)", price:300, image:"🥟"}, {name:"French Fry", price:120, image:"🍟"}, {name:"Thai Chicken Fry (6 pcs)", price:350, image:"🍗"}, {name:"Rosoi Ghor Special Chicken Fry (6 pcs)", price:410, image:"🍗"}, {name:"Crispy Chicken Fry (1 pc)", price:110, image:"🍗"}, {name:"Spring Chicken Fry (8 pcs)", price:450, image:"🍗"}, {name:"Rosoi Ghor Special Wonton (10 pcs)", price:350, image:"🥟"}, {name:"Chicken Ball (8 pcs)", price:300, image:"🍗"}, {name:"Chicken Cutlet (1:3)", price:350, image:"🍗"}, {name:"Chicken Popcorn", price:200, image:"🍗"}, {name:"Chicken Sharma", price:100, image:"🌯"}, {name:"Ginger Chicken Mushroom", price:320, image:"🍄"}, {name:"Nachos", price:200, image:"🌮"}, {name:"Chicken Nachos", price:250, image:"🌮"}, {name:"BBQ Chicken Nachos", price:300, image:"🌮"}, {name:"Wings Fry (6 pcs)", price:240, image:"🍗"}, {name:"BBQ Wings (6 pcs)", price:250, image:"🍗"}, {name:"Wages (10 pcs)", price:120, image:"🍟"},
+        {name:"Chicken Masala (8 pcs)", price:300, image:"🍛"}, {name:"Prawn Masala (10 pcs)", price:400, image:"🍛"}, {name:"Mutton Rezala", price:650, image:"🍛"}, {name:"Rosoi Ghor Special Chicken Masala (1:3)", price:400, image:"🍛"}, {name:"Chicken Korai (1:2)", price:300, image:"🍛"}, {name:"Chicken Dopyaja (1:2)", price:370, image:"🍛"}, {name:"Chicken Chilli Onion (1:2)", price:300, image:"🍛"}, {name:"Prawn Chilli (1:2)", price:400, image:"🍛"}, {name:"Chicken Sizzling (1:3)", price:350, image:"🍲"}, {name:"Prawn Sizzling (1:3)", price:400, image:"🍲"}, {name:"Rosoi Ghor Special Sizzling (1:3)", price:450, image:"🍲"}, {name:"Hot and Sour Chicken", price:300, image:"🍛"}, {name:"Lemon Chicken", price:350, image:"🍛"}, {name:"Manchurian Chicken", price:350, image:"🍛"},
+        {name:"Chicken Vegetable (1:3)", price:300, image:"🥗"}, {name:"Mix Vegetable (1:3)", price:250, image:"🥗"}, {name:"Rosoi Ghor Special Vegetable (1:3)", price:350, image:"🥗"}, {name:"Thai Vegetable (1:3)", price:350, image:"🥗"},
+        {name:"Chicken Fried Rice (1:3)", price:320, image:"🍚"}, {name:"Prawn Fried Rice (1:3)", price:350, image:"🍚"}, {name:"Thai Fried Rice (1:3)", price:300, image:"🍚"}, {name:"Rosoi Ghor Special Fried Rice (1:3)", price:400, image:"🍚"}, {name:"Vegetable Fried Rice (1:3)", price:250, image:"🍚"}, {name:"Egg Fried Rice (1:3)", price:250, image:"🍚"}, {name:"Steam Rice (1:1)", price:70, image:"🍚"},
+        {name:"Rosoi Ghor Special Chicken Somucha (1 pcs)", price:30, image:"🥟"}, {name:"Halim (1:1)", price:100, image:"🍛"}, {name:"Rosoi Ghor Special Mutton Biryani (1:1)", price:400, image:"🍛"}, {name:"Chicken Biryani (1:1)", price:180, image:"🍛"}, {name:"Chicken Tikka Biryani (1:1)", price:300, image:"🍛"}, {name:"Morog Polao (1:1)", price:200, image:"🍛"}, {name:"Kashmiri Polao Roast (1:1)", price:330, image:"🍛"}, {name:"Mutton Biryani (1:1)", price:300, image:"🍛"},
+        {name:"Salt Lassi", price:120, image:"🥤"}, {name:"Lassi", price:120, image:"🥤"}, {name:"Special Lassi", price:180, image:"🥤"}, {name:"Milk Shake", price:140, image:"🥤"}, {name:"Cold Coffee", price:140, image:"☕"}, {name:"Hot Coffee", price:80, image:"☕"}, {name:"Lemon Juice", price:70, image:"🍹"}, {name:"Orange Juice", price:150, image:"🍹"}, {name:"Mango Juice", price:120, image:"🍹"}, {name:"Watermelon Juice", price:120, image:"🍹"}, {name:"Pineapple Juice", price:80, image:"🍹"}, {name:"Green Tea", price:50, image:"☕"},
+        {name:"Doi", price:35, image:"🍮"}, {name:"Phirni", price:50, image:"🍮"},
+        {name:"Chicken Cheese Pasta", price:250, image:"🍝"}, {name:"White Pasta", price:280, image:"🍝"}, {name:"Rosoi Ghor Special Pasta", price:345, image:"🍝"}, {name:"Chicken Pasta", price:200, image:"🍝"}, {name:"Naga Chicken Pasta", price:250, image:"🍝"},
+        {name:"Chicken Tikka Burger", price:130, image:"🍔"}, {name:"Crispy Chicken Burger", price:180, image:"🍔"}, {name:"Naga Chicken Burger", price:180, image:"🍔"}, {name:"Rosoi Ghor Special Cheese Burger", price:220, image:"🍔"}, {name:"Crispy Chicken Cheese Burger", price:200, image:"🍔"},
+        {name:"Egg Sandwich", price:80, image:"🥪"}, {name:"Chicken Sandwich", price:120, image:"🥪"}, {name:"Arabian Chicken Shawarma", price:180, image:"🌯"}, {name:"Juicy Chicken Shawarma", price:200, image:"🌯"},
+        {name:"Chicken Salad (1:3)", price:300, image:"🥗"}, {name:"Chicken Cashew Nut Salad (1:3)", price:350, image:"🥗"}, {name:"Rosoi Ghor Special Cashew Nut Salad (1:3)", price:450, image:"🥗"}, {name:"Mix Salad (1:3)", price:150, image:"🥗"}, {name:"Laab Gai Salad", price:350, image:"🥗"}, {name:"Russian Salad", price:380, image:"🥗"},
+        {name:"Thai Soup (1:1)", price:200, image:"🍲"}, {name:"Chicken Thai Soup (1:3)", price:350, image:"🍲"}, {name:"Rosoi Ghor Special Thai Soup (1:3)", price:450, image:"🍲"}, {name:"Thai Clear Soup (1:3)", price:280, image:"🍲"}, {name:"Chicken Corn Soup (1:3)", price:300, image:"🍲"}, {name:"Shishuon Soup (1:3)", price:380, image:"🍲"}, {name:"Chicken Vegetable Soup (1:3)", price:300, image:"🍲"}, {name:"Hot and Sour Soup (1:3)", price:300, image:"🍲"},
+        {name:"Chicken Chowmein (1:3)", price:300, image:"🍜"}, {name:"Prawn Chowmein (1:3)", price:450, image:"🍜"}, {name:"Rosoi Ghor Special Chowmein (1:3)", price:550, image:"🍜"}, {name:"Thai Noodles (1:3)", price:380, image:"🍜"}, {name:"American Noodles (1:3)", price:360, image:"🍜"}, {name:"American Chopsy (1:3)", price:400, image:"🍜"}, {name:"Vegetable Chowmein (1:3)", price:260, image:"🍜"}
+      ]},
+      
+      { id: 13, name: "Cafe Jingbang", cat: "cafe", items: [
+        {name:"Regular Fuchka (6pcs)", price:60, image:"🍢"}, {name:"Special Doi Fuchka (6pcs)", price:120, image:"🍢"}, {name:"Naga Fuchka (6pcs)", price:80, image:"🍢"}, {name:"Chicken Fuchka (6pcs)", price:100, image:"🍢"}, {name:"Doi Fuchka", price:100, image:"🍢"}, {name:"Beef Fuchka", price:60, image:"🍢"}, {name:"Chocolate Fuchka", price:100, image:"🍢"},
+        {name:"Regular Chotpoti", price:60, image:"🍲"}, {name:"Naga Chotpoti", price:70, image:"🍲"}, {name:"Chicken Chotpoti", price:100, image:"🍲"}, {name:"Nababi Chotpoti", price:100, image:"🍲"},
+        {name:"Chicken Chowmein (1:2)", price:150, image:"🍜"}, {name:"Chicken Chowmein (1:3)", price:250, image:"🍜"}, {name:"Egg Chowmein (1:2)", price:130, image:"🍜"}, {name:"Egg Chowmein (1:3)", price:200, image:"🍜"}, {name:"Shahi Chowmein (1:2)", price:150, image:"🍜"}, {name:"Shahi Chowmein (1:3)", price:250, image:"🍜"},
+        {name:"Chicken Pasta", price:180, image:"🍝"}, {name:"Shahi Pasta", price:190, image:"🍝"},
+        {name:"Chicken Fry (1pcs)", price:100, image:"🍗"}, {name:"Mini Chicken Fry (6pcs)", price:220, image:"🍗"},
+        {name:"Doi Chira", price:60, image:"🍚"}, {name:"Chicken Alur Chira", price:60, image:"🍚"},
+        {name:"Special Lassi", price:100, image:"🥤"}, {name:"Mango Lassi", price:120, image:"🥤"}, {name:"Chocolate Lassi", price:120, image:"🥤"}, {name:"Mixed Fruit Lassi", price:140, image:"🥤"},
+        {name:"Kaju Badam Mix Shake", price:100, image:"🥤"}, {name:"Mango Mix Shake", price:100, image:"🥤"}, {name:"Chocolate Mix Shake", price:120, image:"🥤"}, {name:"Oreo Mix Shake", price:120, image:"🥤"},
+        {name:"Lemon Mint", price:60, image:"🍹"}, {name:"Mixed Fruit Juice", price:150, image:"🍹"}, {name:"Pineapple Juice", price:70, image:"🍹"}, {name:"Orange Juice", price:70, image:"🍹"}, {name:"Mint and Fruit Juice", price:130, image:"🍹"}, {name:"Mango Juice", price:70, image:"🍹"},
+        {name:"Coca Cola", price:80, image:"🥤"}, {name:"Sprite", price:80, image:"🥤"},
+        {name:"Dudh Cha", price:20, image:"☕"}, {name:"Rong Cha", price:20, image:"☕"}, {name:"Chak", price:30, image:"☕"}, {name:"Ruti Kofi", price:60, image:"☕"}, {name:"Cold Coffee", price:100, image:"☕"}
+      ]},
+      
+      { id: 14, name: "Chumuk", cat: "drinks", items: [
+        {name:"Chicken Momo (6 Pcs)", price:120, image:"🥟"}, {name:"Chicken Roll", price:100, image:"🌯"}, {name:"Chicken Singara (6 Pcs)", price:150, image:"🥟"}, {name:"Chicken Fry (6 Pcs)", price:300, image:"🍗"}, {name:"Chicken Chowmein (1:3)", price:270, image:"🍜"}, {name:"Chicken Masala (1:3)", price:350, image:"🍛"}, {name:"Chicken Chaap (1:1)", price:150, image:"🍗"}, {name:"Chicken Pakora (10 Pcs)", price:200, image:"🍗"}, {name:"Chicken Popcorn (25 Pcs)", price:200, image:"🍗"}, {name:"Momo Soup (1:3)", price:350, image:"🍲"}, {name:"Thai Soup (1:3)", price:380, image:"🍲"}, {name:"Parota (1 Pcs)", price:15, image:"🍞"}, {name:"Khasir Paya + Parota (2Pcs) (1:1)", price:160, image:"🍲"}, {name:"Lassi", price:90, image:"🥤"}, {name:"Cold Coffee", price:110, image:"☕"}, {name:"Milkshake", price:130, image:"🥤"}, {name:"Milk Tea", price:25, image:"☕"}, {name:"Black Tea", price:15, image:"☕"}, {name:"Fish Fry (per plate)", price:200, image:"🐟"}
+      ]}
     ];
 
-    // Generate 22-40 items per restaurant
-    function generateItems(count = 28) {
-      const base = ["Chicken Burger", "Beef Burger", "Cheese Pizza", "Chicken Pizza", "Kacchi Biriyani", "Chicken Kacchi", "Mocha", "Latte", "Cold Coffee", "Orange Juice", "Mango Smoothie", "Chocolate Cake", "Brownie", "Cheesecake", "Falafel", "Shawarma", "Grilled Chicken", "Pasta", "Fries", "Onion Rings", "Naan", "Paratha", "Chicken Curry", "Beef Curry", "Fish Fry", "Salad", "Spring Roll", "Samosa", "Pudding", "Cupcake", "Donut", "Croissant", "Muffin", "Taco", "Wrap", "Burrito", "Kebab", "Tikka", "Biryani", "Pulao"];
-      const items = [];
-      const used = new Set();
-      for (let i = 0; i < count; i++) {
-        let name = base[i % base.length] + (i >= base.length ? ` ${i}` : '');
-        if (used.has(name)) name += ` ${i}`;
-        used.add(name);
-        items.push({ name, price: 120 + Math.floor(Math.random() * 380) + 10, image: '🍽️' });
-      }
-      return items;
-    }
-
-    // Attach items to each restaurant
-    restaurantData.forEach(r => {
-      r.items = generateItems(22 + Math.floor(Math.random() * 18));
-    });
-
     // ---------- STATE ----------
-    let cart = {}; // key: "restoId-name" => { name, price, qty, restoName }
+    let cart = {};
     let currentRestoId = null;
     let activeCategory = 'all';
     let searchQuery = '';
 
-    // DOM refs
     const restoContainer = document.getElementById('restaurantContainer');
     const menuPanel = document.getElementById('menuPanel');
     const menuRestoName = document.getElementById('menuRestoName');
@@ -179,17 +346,11 @@
     const searchInput = document.getElementById('searchInput');
     const catItems = document.querySelectorAll('.cat-item');
 
-    // ---------- RENDER RESTAURANTS (filter by category + search) ----------
+    // ---------- RENDER RESTAURANTS ----------
     function renderRestaurants() {
       let filtered = restaurantData;
-      // category filter
-      if (activeCategory !== 'all') {
-        filtered = filtered.filter(r => r.cat === activeCategory);
-      }
-      // search filter
-      if (searchQuery.trim() !== '') {
-        filtered = filtered.filter(r => r.name.toLowerCase().includes(searchQuery.toLowerCase()));
-      }
+      if (activeCategory !== 'all') filtered = filtered.filter(r => r.cat === activeCategory);
+      if (searchQuery.trim() !== '') filtered = filtered.filter(r => r.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
       restoContainer.innerHTML = filtered.map(r => `
         <div class="resto-card" data-restoid="${r.id}">
@@ -199,11 +360,9 @@
         </div>
       `).join('');
 
-      // attach click event
       document.querySelectorAll('.resto-card').forEach(card => {
         card.addEventListener('click', function() {
-          const id = parseInt(this.dataset.restoid);
-          openMenu(id);
+          openMenu(parseInt(this.dataset.restoid));
         });
       });
     }
@@ -229,10 +388,7 @@
 
       menuItemsList.querySelectorAll('button').forEach(btn => {
         btn.addEventListener('click', function() {
-          const rId = parseInt(this.dataset.restoid);
-          const name = this.dataset.name;
-          const price = parseInt(this.dataset.price);
-          addToCart(rId, name, price);
+          addToCart(parseInt(this.dataset.restoid), this.dataset.name, parseInt(this.dataset.price));
           renderCart();
         });
       });
@@ -245,30 +401,21 @@
       currentRestoId = null;
     });
 
-    // ---------- CART OPERATIONS ----------
+    // ---------- CART ----------
     function addToCart(restoId, name, price) {
       const resto = restaurantData.find(r => r.id === restoId);
       const restoName = resto ? resto.name : 'Unknown';
       const key = `${restoId}-${name}`;
-      if (cart[key]) {
-        cart[key].qty += 1;
-      } else {
-        cart[key] = { name, price, qty: 1, restoName };
-      }
+      if (cart[key]) cart[key].qty += 1;
+      else cart[key] = { name, price, qty: 1, restoName };
       renderCart();
     }
 
-    function removeFromCart(key) {
-      delete cart[key];
-      renderCart();
-    }
-
+    function removeFromCart(key) { delete cart[key]; renderCart(); }
     function changeQty(key, delta) {
       if (!cart[key]) return;
       cart[key].qty += delta;
-      if (cart[key].qty <= 0) {
-        delete cart[key];
-      }
+      if (cart[key].qty <= 0) delete cart[key];
       renderCart();
     }
 
@@ -305,23 +452,19 @@
       cartItemsContainer.innerHTML = html;
       cartTotalPrice.textContent = `৳ ${total}`;
 
-      // event listeners for quantity and remove
       cartItemsContainer.querySelectorAll('.fa-minus, .fa-plus').forEach(el => {
         el.addEventListener('click', function() {
-          const key = this.dataset.key;
-          const delta = parseInt(this.dataset.delta);
-          changeQty(key, delta);
+          changeQty(this.dataset.key, parseInt(this.dataset.delta));
         });
       });
       cartItemsContainer.querySelectorAll('.fa-trash-alt').forEach(el => {
         el.addEventListener('click', function() {
-          const key = this.dataset.key;
-          removeFromCart(key);
+          removeFromCart(this.dataset.key);
         });
       });
     }
 
-    // ---------- WHATSAPP ORDER ----------
+    // ---------- WHATSAPP ----------
     function buildOrderMessage() {
       const name = document.getElementById('customerName').value.trim();
       const phone = document.getElementById('customerPhone').value.trim();
@@ -329,8 +472,7 @@
       const keys = Object.keys(cart);
       if (keys.length === 0) return null;
 
-      let itemLines = '';
-      let total = 0;
+      let itemLines = '', total = 0;
       keys.forEach(key => {
         const item = cart[key];
         const subtotal = item.price * item.qty;
@@ -349,22 +491,16 @@ Total Price: ৳${total}`;
 
     confirmBtn.addEventListener('click', function() {
       const msg = buildOrderMessage();
-      if (!msg) {
-        alert('Cart is empty! Add items first.');
-        return;
-      }
-      const phone = '01867477158';
-      const encoded = encodeURIComponent(msg);
-      window.open(`https://wa.me/88${phone}?text=${encoded}`, '_blank');
+      if (!msg) { alert('Cart is empty!'); return; }
+      window.open(`https://wa.me/8801867477158?text=${encodeURIComponent(msg)}`, '_blank');
     });
 
-    // ---------- SEARCH ----------
+    // ---------- SEARCH & CATEGORY ----------
     searchInput.addEventListener('input', function() {
       searchQuery = this.value;
       renderRestaurants();
     });
 
-    // ---------- CATEGORY ----------
     catItems.forEach(cat => {
       cat.addEventListener('click', function() {
         catItems.forEach(c => c.classList.remove('active'));
