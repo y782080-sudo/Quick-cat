@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
+  <title>Quick Cart · food delivery</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, system-ui, sans-serif; }
+    body { background: #0b0b0b; display: flex; justify-content: center; padding: 16px 12px 40px; min-height: 100vh; }
+    #app { max-width: 480px; width: 100%; background: #141414; border-radius: 40px 40px 30px 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); overflow: hidden; padding: 20px 16px 30px; color: #f0f0f0; }
+    
+    .app-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; padding: 0 4px; }
+    .logo-icon { background: #ff6b1a; width: 48px; height: 48px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 28px; color: #0b0b0b; box-shadow: 0 6px 14px rgba(255,107,26,0.3); }
+    .logo-text { font-size: 26px; font-weight: 700; background: linear-gradient(135deg, #ff8c2e, #ff5e00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .logo-sub { font-size: 12px; color: #aaa; margin-left: 4px; }
+    
+    .search-wrapper { background: #232323; border-radius: 40px; padding: 6px 18px; display: flex; align-items: center; gap: 10px; margin-bottom: 22px; border: 1px solid #333; }
+    .search-wrapper i { color: #ff7a2f; font-size: 18px; }
+    .search-wrapper input { background: transparent; border: none; padding: 14px 0; width: 100%; font-size: 16px; color: #f0f0f0; outline: none; }
+    .search-wrapper input::placeholder { color: #777; }
+    
+    .categories { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 12px; margin-bottom: 16px; scrollbar-width: none; }
+    .categories::-webkit-scrollbar { display: none; }
+    .cat-item { background: #1f1f1f; padding: 10px 22px; border-radius: 40px; font-weight: 600; font-size: 15px; white-space: nowrap; border: 1px solid #2c2c2c; color: #ccc; transition: 0.15s; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.6); }
+    .cat-item.active, .cat-item:hover { background: #ff6b1a; border-color: #ff6b1a; color: #0b0b0b; }
+    
+    .restaurant-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 10px 0 16px; }
+    .resto-card { background: #1e1e1e; border-radius: 24px; padding: 14px 12px 16px; border: 1px solid #2c2c2c; transition: all 0.15s ease; box-shadow: 0 6px 12px rgba(0,0,0,0.4); cursor: pointer; text-align: center; }
+    .resto-card:hover { background: #2a2a2a; border-color: #ff7a2f; transform: scale(0.98); }
+    .resto-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; color: #f5f5f5; }
+    .resto-card p { font-size: 12px; color: #aaa; }
+    .resto-card .badge { background: #ff6b1a; color: #0b0b0b; font-weight: 700; font-size: 11px; padding: 2px 10px; border-radius: 30px; display: inline-block; margin-top: 6px; }
+    
+    .menu-panel { background: #181818; border-radius: 32px; padding: 20px 14px 20px; margin: 18px 0 12px; border: 1px solid #2a2a2a; display: none; animation: fadeSlide 0.25s ease; }
+    .menu-panel.active { display: block; }
+    @keyframes fadeSlide { 0% { opacity: 0.6; transform: translateY(8px); } 100% { opacity: 1; transform: translateY(0); } }
+    
+    .menu-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .menu-header h2 { font-size: 22px; font-weight: 700; color: #ff8c2e; }
+    .menu-header i { color: #ff6b1a; font-size: 24px; cursor: pointer; background: #222; padding: 8px 12px; border-radius: 40px; }
+    
+    .menu-items { display: flex; flex-direction: column; gap: 12px; max-height: 400px; overflow-y: auto; padding-right: 6px; }
+    .menu-item { background: #232323; border-radius: 20px; padding: 12px 14px; display: flex; align-items: center; gap: 14px; border: 1px solid #303030; }
+    .menu-item .img-placeholder { width: 60px; height: 60px; border-radius: 18px; background: #2e2e2e; display: flex; align-items: center; justify-content: center; font-size: 26px; }
+    .menu-item-info { flex: 1; }
+    .menu-item-info h4 { font-size: 16px; font-weight: 600; }
+    .menu-item-info p { font-size: 15px; color: #ffb07a; font-weight: 600; }
+    .menu-item button { background: #ff6b1a; border: none; padding: 10px 16px; border-radius: 40px; font-weight: 700; color: #0b0b0b; font-size: 14px; cursor: pointer; transition: 0.1s; box-shadow: 0 4px 8px rgba(255,107,26,0.2); }
+    .menu-item button:active { transform: scale(0.92); }
+    
+    .cart-section { background: #1a1a1a; border-radius: 30px; padding: 16px 14px 20px; margin: 18px 0 12px; border: 1px solid #2e2e2e; }
+    .cart-title { font-size: 20px; font-weight: 700; display: flex; gap: 10px; align-items: center; color: #ff8c2e; margin-bottom: 10px; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; background: #262626; border-radius: 30px; padding: 10px 16px; margin-bottom: 8px; flex-wrap: wrap; gap: 4px; }
+    .cart-item .item-name { font-weight: 500; font-size: 14px; flex: 1; min-width: 120px; }
+    .cart-item .item-name small { color: #ffa96a; font-size: 11px; display: block; }
+    .cart-item .qty-control { display: flex; gap: 12px; align-items: center; background: #1a1a1a; padding: 2px 12px; border-radius: 40px; }
+    .qty-control i { color: #ff6b1a; cursor: pointer; font-size: 16px; }
+    .cart-total { display: flex; justify-content: space-between; font-weight: 700; font-size: 20px; margin-top: 12px; border-top: 1px solid #333; padding-top: 12px; }
+    
+    .order-section { background: #1a1a1a; border-radius: 30px; padding: 18px 16px; border: 1px solid #2e2e2e; margin-top: 12px; }
+    .order-section h3 { margin-bottom: 14px; color: #ff8c2e; }
+    .order-section input { width: 100%; padding: 14px 18px; border-radius: 60px; border: none; background: #292929; color: #fff; margin-bottom: 12px; font-size: 15px; }
+    .order-section input::placeholder { color: #777; }
+    .confirm-btn { background: #ff6b1a; border: none; width: 100%; padding: 16px; border-radius: 60px; font-weight: 700; font-size: 18px; color: #0b0b0b; cursor: pointer; margin: 10px 0 6px; box-shadow: 0 6px 12px rgba(255,107,26,0.2); }
+    .confirm-btn:active { transform: scale(0.96); }
+    .empty-cart-msg { color: #888; padding: 14px 0; text-align: center; }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="app-header">
+    <div class="logo-icon"><i class="fas fa-bolt"></i></div>
+    <div><span class="logo-text">Quick Cart</span><span class="logo-sub">delivery</span></div>
+  </div>
+
+  <div class="search-wrapper">
+    <i class="fas fa-search"></i>
+    <input type="text" placeholder="Search restaurants..." id="searchInput" />
+  </div>
+
+  <div class="categories" id="categoryList">
+    <span class="cat-item active" data-cat="all">All</span>
+    <span class="cat-item" data-cat="burger">Burger</span>
+    <span class="cat-item" data-cat="pizza">Pizza</span>
+    <span class="cat-item" data-cat="kacchi">Kacchi</span>
+    <span class="cat-item" data-cat="cafe">Cafe</span>
+    <span class="cat-item" data-cat="drinks">Drinks</span>
+    <span class="cat-item" data-cat="dessert">Dessert</span>
+  </div>
+
+  <div id="restaurantContainer" class="restaurant-grid"></div>
+
+  <div id="menuPanel" class="menu-panel">
+    <div class="menu-header">
+      <div>
+        <h2 id="menuRestoName">Menu</h2>
+        <div style="font-size: 14px; color: #ffb07a; margin-top: 2px;" id="menuRestoSub">Restaurant: </div>
+      </div>
+      <i class="fas fa-times" id="closeMenuBtn"></i>
+    </div>
+    <div id="menuItemsList" class="menu-items"></div>
+  </div>
+
+  <div class="cart-section" id="cartSection">
+    <div class="cart-title"><i class="fas fa-cart-shopping"></i> Your Cart</div>
+    <div id="cartItemsContainer"></div>
+    <div class="cart-total"><span>Total</span><span id="cartTotalPrice">৳ 0</span></div>
+  </div>
+
+  <div class="order-section">
+    <h3><i class="fas fa-truck"></i> Delivery details</h3>
+    <input type="text" id="customerName" placeholder="Full name" />
+    <input type="text" id="customerPhone" placeholder="Phone number" />
+    <input type="text" id="customerAddress" placeholder="Address" />
+    <button class="confirm-btn" id="confirmOrderBtn"><i class="fab fa-whatsapp"></i> Confirm Order</button>
+    <div style="font-size: 13px; color: #666; margin-top: 8px;">Order via WhatsApp: 01867477158</div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // ---------- DATA (17 restaurants with categories and items) ----------
+    const restaurantData = [
+      { id: 0, name: "Mommy's Kitchen", cat: "cafe" },
+      { id: 1, name: "London Restaurant", cat: "burger" },
+      { id: 2, name: "Cafe Time Out", cat: "cafe" },
+      { id: 3, name: "Sreemongol Kabab Mohol", cat: "kacchi" },
+      { id: 4, name: "Sip N Slay", cat: "drinks" },
+      { id: 5, name: "Laziz", cat: "pizza" },
+      { id: 6, name: "Pansi", cat: "dessert" },
+      { id: 7, name: "Kutum Bari", cat: "kacchi" },
+      { id: 8, name: "Ghushh Vandar", cat: "burger" },
+      { id: 9, name: "Rud Misti", cat: "dessert" },
+      { id: 10, name: "Dhaka Biriyani", cat: "kacchi" },
+      { id: 11, name: "Opurbo", cat: "pizza" },
+      { id: 12, name: "Dream Cake", cat: "dessert" },
+      { id: 13, name: "Dora Cake", cat: "dessert" },
+      { id: 14, name: "Dreyme Dessert", cat: "dessert" },
+      { id: 15, name: "Burger Boss", cat: "burger" },
+      { id: 16, name: "Kacci King", cat: "kacchi" }
+    ];
+
+    // Generate 22-40 items per restaurant
+    function generateItems(count = 28) {
+      const base = ["Chicken Burger", "Beef Burger", "Cheese Pizza", "Chicken Pizza", "Kacchi Biriyani", "Chicken Kacchi", "Mocha", "Latte", "Cold Coffee", "Orange Juice", "Mango Smoothie", "Chocolate Cake", "Brownie", "Cheesecake", "Falafel", "Shawarma", "Grilled Chicken", "Pasta", "Fries", "Onion Rings", "Naan", "Paratha", "Chicken Curry", "Beef Curry", "Fish Fry", "Salad", "Spring Roll", "Samosa", "Pudding", "Cupcake", "Donut", "Croissant", "Muffin", "Taco", "Wrap", "Burrito", "Kebab", "Tikka", "Biryani", "Pulao"];
+      const items = [];
+      const used = new Set();
+      for (let i = 0; i < count; i++) {
+        let name = base[i % base.length] + (i >= base.length ? ` ${i}` : '');
+        if (used.has(name)) name += ` ${i}`;
+        used.add(name);
+        items.push({ name, price: 120 + Math.floor(Math.random() * 380) + 10, image: '🍽️' });
+      }
+      return items;
+    }
+
+    // Attach items to each restaurant
+    restaurantData.forEach(r => {
+      r.items = generateItems(22 + Math.floor(Math.random() * 18));
+    });
+
+    // ---------- STATE ----------
+    let cart = {}; // key: "restoId-name" => { name, price, qty, restoName }
+    let currentRestoId = null;
+    let activeCategory = 'all';
+    let searchQuery = '';
+
+    // DOM refs
+    const restoContainer = document.getElementById('restaurantContainer');
+    const menuPanel = document.getElementById('menuPanel');
+    const menuRestoName = document.getElementById('menuRestoName');
+    const menuRestoSub = document.getElementById('menuRestoSub');
+    const menuItemsList = document.getElementById('menuItemsList');
+    const closeMenuBtn = document.getElementById('closeMenuBtn');
+    const cartItemsContainer = document.getElementById('cartItemsContainer');
+    const cartTotalPrice = document.getElementById('cartTotalPrice');
+    const confirmBtn = document.getElementById('confirmOrderBtn');
+    const searchInput = document.getElementById('searchInput');
+    const catItems = document.querySelectorAll('.cat-item');
+
+    // ---------- RENDER RESTAURANTS (filter by category + search) ----------
+    function renderRestaurants() {
+      let filtered = restaurantData;
+      // category filter
+      if (activeCategory !== 'all') {
+        filtered = filtered.filter(r => r.cat === activeCategory);
+      }
+      // search filter
+      if (searchQuery.trim() !== '') {
+        filtered = filtered.filter(r => r.name.toLowerCase().includes(searchQuery.toLowerCase()));
+      }
+
+      restoContainer.innerHTML = filtered.map(r => `
+        <div class="resto-card" data-restoid="${r.id}">
+          <h3>${r.name}</h3>
+          <p>${r.items.length} items</p>
+          <div class="badge">${r.cat === 'burger' ? '🍔' : r.cat === 'pizza' ? '🍕' : r.cat === 'kacchi' ? '🍗' : r.cat === 'cafe' ? '☕' : r.cat === 'drinks' ? '🥤' : '🍰'}</div>
+        </div>
+      `).join('');
+
+      // attach click event
+      document.querySelectorAll('.resto-card').forEach(card => {
+        card.addEventListener('click', function() {
+          const id = parseInt(this.dataset.restoid);
+          openMenu(id);
+        });
+      });
+    }
+
+    // ---------- OPEN MENU ----------
+    function openMenu(restoId) {
+      const resto = restaurantData.find(r => r.id === restoId);
+      if (!resto) return;
+      currentRestoId = restoId;
+      menuRestoName.textContent = resto.name;
+      menuRestoSub.textContent = `Restaurant: ${resto.name}`;
+
+      menuItemsList.innerHTML = resto.items.map((item, idx) => `
+        <div class="menu-item">
+          <div class="img-placeholder">${item.image}</div>
+          <div class="menu-item-info">
+            <h4>${item.name}</h4>
+            <p>৳ ${item.price}</p>
+          </div>
+          <button data-restoid="${restoId}" data-name="${item.name}" data-price="${item.price}">+ Add</button>
+        </div>
+      `).join('');
+
+      menuItemsList.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const rId = parseInt(this.dataset.restoid);
+          const name = this.dataset.name;
+          const price = parseInt(this.dataset.price);
+          addToCart(rId, name, price);
+          renderCart();
+        });
+      });
+
+      menuPanel.classList.add('active');
+    }
+
+    closeMenuBtn.addEventListener('click', function() {
+      menuPanel.classList.remove('active');
+      currentRestoId = null;
+    });
+
+    // ---------- CART OPERATIONS ----------
+    function addToCart(restoId, name, price) {
+      const resto = restaurantData.find(r => r.id === restoId);
+      const restoName = resto ? resto.name : 'Unknown';
+      const key = `${restoId}-${name}`;
+      if (cart[key]) {
+        cart[key].qty += 1;
+      } else {
+        cart[key] = { name, price, qty: 1, restoName };
+      }
+      renderCart();
+    }
+
+    function removeFromCart(key) {
+      delete cart[key];
+      renderCart();
+    }
+
+    function changeQty(key, delta) {
+      if (!cart[key]) return;
+      cart[key].qty += delta;
+      if (cart[key].qty <= 0) {
+        delete cart[key];
+      }
+      renderCart();
+    }
+
+    function renderCart() {
+      const keys = Object.keys(cart);
+      if (keys.length === 0) {
+        cartItemsContainer.innerHTML = `<div class="empty-cart-msg"><i class="fas fa-bag-shopping"></i> Cart is empty</div>`;
+        cartTotalPrice.textContent = '৳ 0';
+        return;
+      }
+
+      let total = 0;
+      let html = '';
+      keys.forEach(key => {
+        const item = cart[key];
+        const subtotal = item.price * item.qty;
+        total += subtotal;
+        html += `
+          <div class="cart-item">
+            <div class="item-name">
+              ${item.name}
+              <small>${item.restoName}</small>
+            </div>
+            <div class="qty-control">
+              <i class="fas fa-minus" data-key="${key}" data-delta="-1"></i>
+              <span>${item.qty}</span>
+              <i class="fas fa-plus" data-key="${key}" data-delta="1"></i>
+              <i class="fas fa-trash-alt" style="color:#ff4d4d; margin-left:8px;" data-key="${key}" data-remove="true"></i>
+            </div>
+            <span>৳ ${subtotal}</span>
+          </div>
+        `;
+      });
+      cartItemsContainer.innerHTML = html;
+      cartTotalPrice.textContent = `৳ ${total}`;
+
+      // event listeners for quantity and remove
+      cartItemsContainer.querySelectorAll('.fa-minus, .fa-plus').forEach(el => {
+        el.addEventListener('click', function() {
+          const key = this.dataset.key;
+          const delta = parseInt(this.dataset.delta);
+          changeQty(key, delta);
+        });
+      });
+      cartItemsContainer.querySelectorAll('.fa-trash-alt').forEach(el => {
+        el.addEventListener('click', function() {
+          const key = this.dataset.key;
+          removeFromCart(key);
+        });
+      });
+    }
+
+    // ---------- WHATSAPP ORDER ----------
+    function buildOrderMessage() {
+      const name = document.getElementById('customerName').value.trim();
+      const phone = document.getElementById('customerPhone').value.trim();
+      const address = document.getElementById('customerAddress').value.trim();
+      const keys = Object.keys(cart);
+      if (keys.length === 0) return null;
+
+      let itemLines = '';
+      let total = 0;
+      keys.forEach(key => {
+        const item = cart[key];
+        const subtotal = item.price * item.qty;
+        total += subtotal;
+        itemLines += `• ${item.name} (${item.restoName}) x${item.qty} = ৳${subtotal}\n`;
+      });
+
+      return `New Order Quick Cart
+Name: ${name || 'N/A'}
+Phone: ${phone || 'N/A'}
+Address: ${address || 'N/A'}
+Items:
+${itemLines}
+Total Price: ৳${total}`;
+    }
+
+    confirmBtn.addEventListener('click', function() {
+      const msg = buildOrderMessage();
+      if (!msg) {
+        alert('Cart is empty! Add items first.');
+        return;
+      }
+      const phone = '01867477158';
+      const encoded = encodeURIComponent(msg);
+      window.open(`https://wa.me/88${phone}?text=${encoded}`, '_blank');
+    });
+
+    // ---------- SEARCH ----------
+    searchInput.addEventListener('input', function() {
+      searchQuery = this.value;
+      renderRestaurants();
+    });
+
+    // ---------- CATEGORY ----------
+    catItems.forEach(cat => {
+      cat.addEventListener('click', function() {
+        catItems.forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        activeCategory = this.dataset.cat;
+        renderRestaurants();
+      });
+    });
+
+    // ---------- INIT ----------
+    renderRestaurants();
+    renderCart();
+  })();
+</script>
+</body>
+</html>
