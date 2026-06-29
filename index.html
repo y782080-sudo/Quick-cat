@@ -37,16 +37,104 @@
     .resto-card p { font-size: 12px; color: #aaa; }
     .resto-card .badge { background: #ff6b1a; color: #0b0b0b; font-weight: 700; font-size: 11px; padding: 2px 10px; border-radius: 30px; display: inline-block; margin-top: 6px; }
     
-    .menu-panel { background: #181818; border-radius: 32px; padding: 20px 14px 20px; margin: 18px 0 12px; border: 1px solid #2a2a2a; display: none; animation: fadeSlide 0.25s ease; }
-    .menu-panel.active { display: block; }
-    @keyframes fadeSlide { 0% { opacity: 0.6; transform: translateY(8px); } 100% { opacity: 1; transform: translateY(0); } }
+    /* MENU OVERLAY (SLIDE-UP) - FLEXBOX VERSION TO PREVENT OVERLAY */
+    .menu-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.6);
+        z-index: 999;
+        display: none;
+        justify-content: center;
+        align-items: flex-end;
+        backdrop-filter: blur(4px);
+    }
+    .menu-overlay.active { display: flex; }
+    .menu-panel {
+        background: #181818;
+        border-radius: 32px 32px 0 0;
+        width: 100%;
+        max-width: 480px;
+        height: 85%;
+        padding: 20px 16px 30px;
+        animation: slideUp 0.2s ease-out;
+        border-top: 2px solid #333;
+        box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+    @keyframes slideUp {
+        from { transform: translateY(100%); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
     
-    .menu-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .menu-header h2 { font-size: 22px; font-weight: 700; color: #ff8c2e; }
-    .menu-header i { color: #ff6b1a; font-size: 24px; cursor: pointer; background: #222; padding: 8px 12px; border-radius: 40px; }
+    .menu-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #181818;
+        padding: 10px 0 10px 0;
+        border-bottom: 1px solid #333;
+        flex: 0 0 auto;
+    }
+    .menu-header .back-btn {
+        background: transparent;
+        border: none;
+        color: #ff6b1a;
+        font-size: 28px;
+        cursor: pointer;
+        padding: 0 8px;
+    }
+    .menu-header h2 { font-size: 22px; font-weight: 700; color: #ff8c2e; margin: 0; flex:1; text-align: center; }
+    .menu-header .close-btn {
+        background: transparent;
+        border: none;
+        color: #888;
+        font-size: 24px;
+        cursor: pointer;
+    }
     
-    .menu-items { display: flex; flex-direction: column; gap: 12px; max-height: 400px; overflow-y: auto; padding-right: 6px; }
-    .menu-item { background: #232323; border-radius: 20px; padding: 12px 14px; display: flex; align-items: center; gap: 14px; border: 1px solid #303030; }
+    .menu-search {
+        background: #232323;
+        border-radius: 40px;
+        padding: 6px 18px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 12px 0 12px 0;
+        border: 1px solid #333;
+        flex: 0 0 auto;
+    }
+    .menu-search i { color: #ff7a2f; font-size: 18px; }
+    .menu-search input {
+        background: transparent;
+        border: none;
+        padding: 10px 0;
+        width: 100%;
+        font-size: 15px;
+        color: #f0f0f0;
+        outline: none;
+    }
+    .menu-search input::placeholder { color: #777; }
+    
+    .menu-items {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding-bottom: 20px;
+        flex: 1;
+        overflow-y: auto;
+        padding-right: 4px;
+    }
+    .menu-item {
+        background: #232323;
+        border-radius: 20px;
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        border: 1px solid #303030;
+    }
+    .menu-item.hidden { display: none; }
     .menu-item .img-placeholder { width: 60px; height: 60px; border-radius: 18px; background: #2e2e2e; display: flex; align-items: center; justify-content: center; font-size: 26px; }
     .menu-item-info { flex: 1; }
     .menu-item-info h4 { font-size: 16px; font-weight: 600; }
@@ -61,7 +149,6 @@
     .cart-item .qty-control { display: flex; gap: 12px; align-items: center; background: #1a1a1a; padding: 2px 12px; border-radius: 40px; }
     .qty-control i { color: #ff6b1a; cursor: pointer; font-size: 16px; }
     
-    /* CART TOTAL SPLIT */
     .cart-total { display: flex; flex-direction: column; align-items: stretch; gap: 6px; margin-top: 12px; border-top: 1px solid #333; padding-top: 12px; }
     .cart-total .total-row { display: flex; justify-content: space-between; width: 100%; }
     .cart-total .total-row .label { font-weight: 700; }
@@ -73,10 +160,107 @@
     .order-section input, .order-section textarea { width: 100%; padding: 14px 18px; border-radius: 20px; border: none; background: #292929; color: #fff; margin-bottom: 12px; font-size: 15px; resize: vertical; }
     .order-section textarea { min-height: 80px; }
     .order-section input::placeholder, .order-section textarea::placeholder { color: #777; }
+    
+    .payment-section { margin-top: 20px; margin-bottom: 20px; }
+    .payment-section h3 { margin-bottom: 12px; color: #ff8c2e; font-size: 16px; display: flex; gap: 8px; align-items: center; }
+    .payment-options { display: flex; gap: 10px; flex-wrap: wrap; }
+    .payment-option { flex: 1; min-width: 80px; cursor: pointer; }
+    .payment-option input { display: none; }
+    .payment-box {
+        display: block;
+        background: #1f1f1f;
+        padding: 12px 8px;
+        text-align: center;
+        border-radius: 12px;
+        border: 2px solid #333;
+        font-size: 14px;
+        color: #ccc;
+        transition: all 0.2s;
+        font-weight: 600;
+    }
+    .payment-option input:checked + .payment-box {
+        border-color: #ff6b1a;
+        color: #ff8c2e;
+        background: #2a1f0f;
+    }
+    
     .confirm-btn { background: #ff6b1a; border: none; width: 100%; padding: 16px; border-radius: 60px; font-weight: 700; font-size: 18px; color: #0b0b0b; cursor: pointer; margin: 10px 0 6px; }
     .empty-cart-msg { color: #888; padding: 14px 0; text-align: center; }
 
-    /* TERMS & FAQ COLLAPSIBLE */
+    /* CONTACT US MODAL */
+    .contact-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.7);
+        z-index: 10000;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(4px);
+    }
+    .contact-overlay.active { display: flex; }
+    .contact-box {
+        background: #1a1a1a;
+        border: 1px solid #333;
+        padding: 30px 24px;
+        border-radius: 30px;
+        width: 85%;
+        max-width: 380px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    }
+    .contact-box h3 { color: #ff8c2e; margin-bottom: 20px; font-size: 20px; }
+    .contact-options { display: flex; flex-direction: column; gap: 14px; }
+    .contact-opt-btn {
+        background: #2a2a2a;
+        padding: 16px;
+        border-radius: 60px;
+        border: 1px solid #444;
+        color: #f0f0f0;
+        font-size: 18px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    .contact-opt-btn:hover { background: #ff6b1a; color: #0b0b0b; border-color: #ff6b1a; }
+    .contact-close {
+        margin-top: 18px;
+        color: #888;
+        font-size: 14px;
+        cursor: pointer;
+        display: inline-block;
+    }
+
+    /* TOAST */
+    #toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #2a2a2a;
+        color: #fff;
+        padding: 12px 24px;
+        border-radius: 40px;
+        border: 1px solid #ff6b1a;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        font-size: 14px;
+        z-index: 99999;
+        opacity: 0;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        pointer-events: none;
+        white-space: nowrap;
+    }
+    #toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-10px);
+        pointer-events: auto;
+    }
+
+    /* ACCORDION */
     .accordion-box { margin-top: 20px; padding: 16px; background: #1f1f1f; border: 1px solid #333; border-radius: 16px; }
     .accordion-box h4 { color: #ff8c2e; margin-bottom: 8px; font-size: 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
     .accordion-box ul { list-style: none; padding-left: 0; margin-top: 10px; display: none; }
@@ -85,8 +269,10 @@
     .accordion-box ul li:last-child { border-bottom: none; }
     .accordion-box ul li strong { color: #fff; }
 
-    /* --- MODAL --- */
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(6px); display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 1; transition: opacity 0.3s; }
+    .footer { text-align: center; color: #666; font-size: 13px; padding-top: 20px; padding-bottom: 10px; border-top: 1px solid #222; margin-top: 20px; }
+
+    /* MODAL */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); display: flex; justify-content: center; align-items: center; z-index: 9999; opacity: 1; transition: opacity 0.3s; }
     .modal-overlay.hidden { display: none; opacity: 0; }
     .modal-box { background: #1a1a1a; border: 1px solid #333; padding: 30px 24px; border-radius: 30px; width: 90%; max-width: 400px; box-shadow: 0 25px 50px rgba(0,0,0,0.9); text-align: center; }
     .modal-box h2 { color: #ff8c2e; margin-bottom: 6px; font-size: 24px; }
@@ -102,6 +288,21 @@
 </head>
 <body>
 
+<!-- TOAST NOTIFICATION -->
+<div id="toast">✅ আইটেমটি কার্টে যোগ করা হয়েছে!</div>
+
+<!-- CONTACT US MODAL -->
+<div id="contactOverlay" class="contact-overlay">
+    <div class="contact-box">
+        <h3>যোগাযোগ করুন</h3>
+        <div class="contact-options">
+            <a href="tel:8801867477158" class="contact-opt-btn"><i class="fas fa-phone-alt"></i> 📞 কল করুন</a>
+            <a href="mailto:foodexpress.bd@gmail.com" class="contact-opt-btn"><i class="fas fa-envelope"></i> 📧 ইমেইল করুন</a>
+            <span class="contact-close" id="closeContactBtn">বন্ধ করুন</span>
+        </div>
+    </div>
+</div>
+
 <!-- REGISTRATION MODAL -->
 <div id="registrationModal" class="modal-overlay hidden">
   <div class="modal-box">
@@ -113,7 +314,7 @@
     
     <div class="modal-checkbox">
       <input type="checkbox" id="agreeTerms" />
-      <label for="agreeTerms">আমি নিচের <strong>শর্তাবলী (Terms & Conditions)</strong> মেনে নিচ্ছি।</label>
+      <label for="agreeTerms">আমি নিচের <strong>শর্তাবলী (Terms & Conditions)</strong> मेनে নিচ্ছি।</label>
     </div>
     
     <button class="modal-btn" id="registerBtn">রেজিস্ট্রেশন করুন</button>
@@ -138,12 +339,12 @@
     <ol>
       <li>আপনার পছন্দের রেস্টুরেন্ট বা ক্যাটাগরি থেকে আইটেম বেছে <strong>"+ Add"</strong> করুন।</li>
       <li>কার্টে আইটেম যুক্ত হলে, ডেলিভারির <strong>নাম, ফোন ও ঠিকানা</strong> দিন।</li>
-      <li><strong>"Confirm Order"</strong> বাটনে ক্লিক করুন। হোয়াটসঅ্যাপ ওপেন হবে।</li>
-      <li>হোয়াটসঅ্যাপে <strong>"Send"</strong> বাটনে ক্লিক করলেই আপনার অর্ডার কনফার্ম হবে।</li>
+      <li>পেমেন্ট পদ্ধতি (COD/বিকাশ/নগদ) বেছে নিন।</li>
+      <li><strong>"Confirm Order"</strong> বাটনে ক্লিক করুন। আপনার অর্ডার আমাদের কাছে পৌঁছাবে।</li>
     </ol>
   </div>
 
-  <!-- 5 Categories -->
+  <!-- Categories -->
   <div class="categories" id="categoryList">
     <span class="cat-item active" data-cat="all">All</span>
     <span class="cat-item" data-cat="food">🍔 Food</span>
@@ -151,26 +352,33 @@
     <span class="cat-item" data-cat="vegetables">🥦 Vegetables</span>
     <span class="cat-item" data-cat="medicine">💊 Medicine</span>
     <span class="cat-item" data-cat="biscuits">🍪 Biscuits</span>
+    <span class="cat-item" data-cat="drinks">🥤 Drinks</span>
+    <span class="cat-item" data-cat="chips">🍟 Chips</span>
+    <span class="cat-item" data-cat="chocolate">🍫 Chocolate</span>
   </div>
 
   <div id="restaurantContainer" class="restaurant-grid"></div>
 
-  <div id="menuPanel" class="menu-panel">
-    <div class="menu-header">
-      <div>
+  <!-- MENU OVERLAY -->
+  <div id="menuOverlay" class="menu-overlay">
+    <div class="menu-panel" id="menuPanel">
+      <div class="menu-header">
+        <button class="back-btn" id="menuBackBtn"><i class="fas fa-arrow-left"></i></button>
         <h2 id="menuRestoName">Menu</h2>
-        <div style="font-size: 14px; color: #ffb07a; margin-top: 2px;" id="menuRestoSub">Shop: </div>
+        <button class="close-btn" id="closeMenuBtn"><i class="fas fa-times"></i></button>
       </div>
-      <i class="fas fa-times" id="closeMenuBtn"></i>
+      <div class="menu-search">
+        <i class="fas fa-search"></i>
+        <input type="text" id="menuSearchInput" placeholder="এই মেনুতে খুঁজুন..." />
+      </div>
+      <div id="menuItemsList" class="menu-items"></div>
     </div>
-    <div id="menuItemsList" class="menu-items"></div>
   </div>
 
   <div class="cart-section" id="cartSection">
     <div class="cart-title"><i class="fas fa-cart-shopping"></i> Your Cart</div>
     <div id="cartItemsContainer"></div>
     
-    <!-- CART TOTAL SPLIT -->
     <div class="cart-total">
         <div class="total-row">
             <span class="label">খাবারের মোট (স্থির মূল্য)</span>
@@ -189,44 +397,108 @@
     <input type="tel" id="customerPhone" placeholder="Phone number (Required)" required />
     <input type="text" id="customerAddress" placeholder="Address (Required)" required />
     
-    <!-- CUSTOM NOTE -->
-    <textarea id="customerNote" placeholder="📝 আপনার প্রয়োজনীয় মালামাল, পরিমাণ বা বিশেষ নির্দেশনা লিখুন (যেমন: ২ কেজি বাসমতি চাল, ৫ পিস দই, মুরগি অর্ধেক)"></textarea>
-    
-    <!-- WHATSAPP BUTTON (WITHOUT SHOWING NUMBER) -->
-    <button class="confirm-btn" id="confirmOrderBtn"><i class="fab fa-whatsapp"></i> Confirm Order</button>
-    <div style="font-size: 13px; color: #666; margin-top: 8px;">WhatsApp দিয়ে অর্ডার কনফার্ম করুন</div>
+    <textarea id="customerNote" placeholder="📝 আপনার প্রয়োজনীয় মালামাল, পরিমাণ বা বিশেষ নির্দেশনা লিখুন (যেমন: ২ কেজি बাসমতি চাল, ৫ পিস দই, মুরগি অর্ধেক)"></textarea>
 
-    <!-- TERMS & CONDITIONS -->
+    <!-- PAYMENT -->
+    <div class="payment-section">
+      <h3><i class="fas fa-credit-card"></i> পেমেন্ট পদ্ধতি নির্বাচন করুন</h3>
+      <div class="payment-options">
+        <label class="payment-option">
+          <input type="radio" name="paymentMethod" value="ক্যাশ অন ডেলিভারি (COD)" checked />
+          <span class="payment-box">ক্যাশ অন ডেলিভারি (COD)</span>
+        </label>
+        <label class="payment-option">
+          <input type="radio" name="paymentMethod" value="বিকাশ (bKash)" />
+          <span class="payment-box">বিকাশ (bKash)</span>
+        </label>
+        <label class="payment-option">
+          <input type="radio" name="paymentMethod" value="নগদ (Nagad)" />
+          <span class="payment-box">নগদ (Nagad)</span>
+        </label>
+      </div>
+    </div>
+    
+    <button class="confirm-btn" id="confirmOrderBtn"><i class="fas fa-check"></i> Confirm Order</button>
+
+    <!-- CONTACT BUTTON -->
+    <div style="text-align: center; margin-top: 15px;">
+        <button class="contact-btn" id="contactBtn" style="background: transparent; border: 1px solid #333; color: #ff8c2e; padding: 10px 30px; border-radius: 40px; font-weight: 600; cursor: pointer; font-size: 15px; width: auto;">
+            <i class="fas fa-headset"></i> Contact Us
+        </button>
+    </div>
+
+    <!-- TERMS -->
     <div class="accordion-box">
       <h4>নোট ও শর্তাবলী (Terms) <i class="fas fa-chevron-down" id="termsToggleIcon"></i></h4>
       <ul id="termsContent">
         <li><strong>১. পণ্যের প্রাপ্যতা:</strong> অর্ডারের সময় যদি কোনো আইটেম স্টকে না থাকে, তবে তা ডেলিভারি দেওয়া সম্ভব হবে না।</li>
         <li><strong>২. মূল্য পরিবর্তনশীল:</strong> সব ধরনের পণ্যের (খাবার, গ্রোসারি, সবজি, ওষুধ) দাম বাজারদর ও মৌসুম অনুযায়ী পরিবর্তনশীল। অর্ডার নিশ্চিত করার আগে আমাদের কল করুন।</li>
         <li><strong>৩. ডেলিভারি এলাকা ও চার্জ:</strong> আমাদের ডেলিভারি অঞ্চল <u>শ্রীমঙ্গল ও মৌলভীবাজার জেলায়</u> সীমাবদ্ধ। ডেলিভারির সময় ও অতিরিক্ত ডেলিভারি চার্জ সম্পর্কে ফোনে নিশ্চিত হয়ে নিন।</li>
-        <li><strong>৪. পেমেন্ট পদ্ধতি:</strong> ক্যাশ অন ডেলিভারি (COD) উপলব্ধ। এছাড়া বিকাশ/নগদে অগ্রিম পেমেন্ট করা যাবে, অথবা ডেলিভারির সময় রাইডারের বিকাশ কিউআর (QR) কোড স্ক্যান করে পেমেন্ট করা যাবে।</li>
-        <li><strong>৫. অর্ডার বাতিল:</strong> ডেলিভারি পারসন রওনা হওয়ার আগ পর্যন্ত অর্ডার বাতিল করা যাবে। অ্যাপ থেকে বাতিল করার অপশন নেই, অনুগ্রহ করে সরাসরি ফোন/WhatsApp-এ যোগাযোগ করুন।</li>
+        <li><strong>৪. পেমেন্ট পদ্ধতি:</strong> ক্যাশ অন ডেলিভারি (COD) উপলব্ধ। এছাড়া বিকাশ/নগদে অগ্রিম पেমেন্ট করা যাবে, অথবা ডেলিভারির সময় রাইডারের বিকাশ কিউআর (QR) কোড স্ক্যান করে পেমেন্ট করা যাবে।</li>
+        <li><strong>৫. অর্ডার বাতিল:</strong> অর্ডার কনফার্ম করার পর কোনো অবস্থাতেই অর্ডার বাতিল করা যাবে না। অ্যাপ থেকে বাতিল করার অপশন নেই।</li>
         <li><strong>৬. ফেরত/প্রতিস্থাপন:</strong> পচনশীল পণ্য (সবজি, মাছ, মাংস) ফেরত নেওয়া যাবে না। ত্রুটিপূর্ণ পণ্য ডেলিভারি পারসনের কাছে সাথে সাথে প্রতিস্থাপন করিয়ে নিন।</li>
         <li><strong>৭. গোপনীয়তা:</strong> আপনার ফোন ও ঠিকানা শুধুমাত্র অর্ডার প্রক্রিয়াকরণের জন্য ব্যবহার করা হয়।</li>
       </ul>
     </div>
 
-    <!-- FAQ SECTION -->
+    <!-- FAQ -->
     <div class="accordion-box" style="margin-top: 10px;">
       <h4>❓ সাধারণ প্রশ্নাবলী (FAQ) <i class="fas fa-chevron-down" id="faqToggleIcon"></i></h4>
       <ul id="faqContent">
         <li><strong>ডেলিভারি কতক্ষণে পাই?</strong> → শ্রীমঙ্গল ও মৌলভীবাজার এলাকায় সাধারণত ৩০-৬০ মিনিটের মধ্যে ডেলিভারি করা হয়।</li>
-        <li><strong>পেমেন্ট কীভাবে করবেন?</strong> → ক্যাশ অন ডেলিভারি (COD) অথবা রাইডারের বিকাশ QR কোড স্ক্যান করে।</li>
-        <li><strong>কোন জিনিস ফেরত দেওয়া যায়?</strong> → পচনশীল পণ্য ফেরত দেওয়া যায় না। ত্রুটিপূর্ণ পণ্য পেলে সাথে সাথে রাইডারকে জানিয়ে প্রতিস্থাপন করে নিন।</li>
-        <li><strong>গ্রোসারি/সবজির দাম কীভাবে ঠিক হবে?</strong> → দাম বাজারদর অনুযায়ী পরিবর্তনশীল। অর্ডার করার আগে ফোন করে দাম নিশ্চিত করে নিন।</li>
-        <li><strong>অর্ডার বাতিল করতে পারব?</strong> → রাইডার রওনা হওয়ার আগ পর্যন্ত বাতিল করা যাবে। বাতিল করতে সরাসরি আমাদের ফোন/WhatsApp-এ কল করুন।</li>
+        <li><strong>পেমেন্ট কীভাবে করবেন?</strong> → ক্যাশ অন ডেলিভারि (COD) অথবা রাইডারের বিকাশ QR কোড স্ক্যান করে।</li>
+        <li><strong>কোন জিনিস ফেরত দেওয়া যায়?</strong> → পচনশীল পণ্য ফেরত দেওয়া যায় না। ত্রুটিপূর্ণ পণ্য পেলে সাথে সাথে রাইडারকে জানিয়ে প্রতিস্থাপন করে निन।</li>
+        <li><strong>গ্রোসारি/সবজির দাম কীভাবে ঠিক হবে?</strong> → दाम बাজারदর অনুযায়ী পরিবর্তনশীল। अर्डार करার আগे ফোন করে দাম নিশ্চিত করে निन।</li>
+        <li><strong>অর্ডার बাতিল করতে পারব?</strong> → अर्डार কনফার্ম করার পর বাতিল করা যাবে না।</li>
       </ul>
+    </div>
+
+    <div class="footer">
+      <p>&copy; <span id="currentYear"></span> Food Express. All Rights Reserved.</p>
     </div>
   </div>
 </div>
 
 <script>
   (function() {
-    // ------------------ REGISTRATION ------------------
+    // ================= TELEGRAM CONFIG =================
+    const TELEGRAM_BOT_TOKEN = "8816657623:AAH8j--NTBc4jrpl1MDye0txXoLUromNtZs";
+    const TELEGRAM_CHAT_ID = "7652720316";
+
+    // ================= CONTACT MODAL =================
+    const contactOverlay = document.getElementById('contactOverlay');
+    const contactBtn = document.getElementById('contactBtn');
+    const closeContactBtn = document.getElementById('closeContactBtn');
+
+    function openContactModal() {
+        contactOverlay.classList.add('active');
+    }
+    function closeContactModal() {
+        contactOverlay.classList.remove('active');
+    }
+    contactBtn.addEventListener('click', openContactModal);
+    closeContactBtn.addEventListener('click', closeContactModal);
+    contactOverlay.addEventListener('click', function(e) {
+        if (e.target === this) closeContactModal();
+    });
+
+    // ================= TOAST =================
+    const toast = document.getElementById('toast');
+    let toastTimeout;
+
+    function showToast(message) {
+        toast.textContent = "✅ " + message;
+        toast.classList.add('show');
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2000);
+    }
+
+    // ================= YEAR =================
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    // ================= REGISTRATION =================
     const regModal = document.getElementById('registrationModal');
     const regName = document.getElementById('regName');
     const regPhone = document.getElementById('regPhone');
@@ -255,7 +527,7 @@
       }
       
       if (!agreeTerms.checked) {
-        regError.textContent = "শর্তাবলী (Terms & Conditions) মেনে নিতে হবে!";
+        regError.textContent = "শর্তাবলী (Terms & Conditions) मেনে নিতে হবে!";
         regError.style.display = 'block';
         return;
       }
@@ -270,7 +542,7 @@
     });
     checkUserState();
 
-    // ------------------ TOGGLE TERMS & FAQ ACCORDION ------------------
+    // ================= ACCORDION =================
     function setupAccordion(headerId, contentId, iconId) {
       const header = document.getElementById(headerId);
       const content = document.getElementById(contentId);
@@ -288,7 +560,16 @@
     setupAccordion('termsToggleIcon', 'termsContent', 'termsToggleIcon');
     setupAccordion('faqToggleIcon', 'faqContent', 'faqToggleIcon');
 
-    // ------------------ SMART ITEM DISPLAY (Weight/Piece) ------------------
+    // ================= SMART ITEM DISPLAY =================
+    const sizeProgression50 = [
+      { label: '৫০ গ্রাম', grams: 50 },
+      { label: '১০০ গ্রাম', grams: 100 },
+      { label: '২৫০ গ্রাম', grams: 250 },
+      { label: '৫০০ গ্রাম', grams: 500 },
+      { label: '১ কেজি', grams: 1000 },
+      { label: '২ কেজি', grams: 2000 }
+    ];
+    
     function formatItemDisplay(name, qty) {
       let match = name.match(/-\s*(\d+(?:\.\d+)?)\s*(কেজি|গ্রাম|পিস|প্যাক|ml|মিলি)/i);
       if (match) {
@@ -300,13 +581,29 @@
           let total = baseVal * qty;
           return `${prefix} - ${total} কেজি`;
         } else if (unit === 'গ্রাম') {
-          let totalG = baseVal * qty;
-          if (totalG >= 1000) {
-            let totalKg = totalG / 1000;
-            let display = Number.isInteger(totalKg) ? totalKg : totalKg.toFixed(1);
-            return `${prefix} - ${display} কেজি`;
+          if (baseVal === 50) {
+            let idx = qty - 1;
+            if (idx < sizeProgression50.length) {
+              let size = sizeProgression50[idx];
+              return `${prefix} - ${size.label}`;
+            } else {
+              let totalG = 50 * qty;
+              if (totalG >= 1000) {
+                let totalKg = totalG / 1000;
+                return `${prefix} - ${totalKg} কেজি`;
+              } else {
+                return `${prefix} - ${totalG} গ্রাম`;
+              }
+            }
           } else {
-            return `${prefix} - ${totalG} গ্রাম`;
+            let totalG = baseVal * qty;
+            if (totalG >= 1000) {
+              let totalKg = totalG / 1000;
+              let display = Number.isInteger(totalKg) ? totalKg : totalKg.toFixed(1);
+              return `${prefix} - ${display} কেজি`;
+            } else {
+              return `${prefix} - ${totalG} গ্রাম`;
+            }
           }
         } else if (unit === 'পিস' || unit === 'প্যাক') {
           return `${prefix} - ${qty} ${unit}`;
@@ -315,9 +612,33 @@
       return `${name} x${qty}`;
     }
 
-    // ------------------ DATA (ALL RESTAURANTS FULL MENU) ------------------
+    function getSizeLabel(name, qty) {
+      let match = name.match(/-\s*(\d+(?:\.\d+)?)\s*(কেজি|গ্রাম|পিস|প্যাক|ml|মিলি)/i);
+      if (match) {
+        let baseVal = parseFloat(match[1]);
+        let unit = match[2];
+        let prefix = name.substring(0, match.index).trim();
+        if (unit === 'গ্রাম' && baseVal === 50) {
+          let idx = qty - 1;
+          if (idx < sizeProgression50.length) {
+            return `${prefix} - ${sizeProgression50[idx].label}`;
+          } else {
+            let totalG = 50 * qty;
+            if (totalG >= 1000) {
+              let totalKg = totalG / 1000;
+              return `${prefix} - ${totalKg} কেজি`;
+            } else {
+              return `${prefix} - ${totalG} গ্রাম`;
+            }
+          }
+        }
+      }
+      return formatItemDisplay(name, qty);
+    }
+
+    // ================= FULL DATA (ALL MENUS RESTORED) =================
     const restaurantData = [
-      // --- 1. FOOD CATEGORY (15 Restaurants - Full Menus) ---
+      // --- FULL MOMMY'S KITCHEN ---
       { id: 0, name: "Mommy's Kitchen", cat: "food", items: [
         {name:"Crispy Chicken Burger", price:110, image:"🍔"}, {name:"Crispy Chicken Cheese Burger", price:150, image:"🍔"}, {name:"BBQ Chicken Burger", price:170, image:"🍔"}, {name:"Double Decker Burger", price:200, image:"🍔"}, {name:"American Burger", price:250, image:"🍔"}, {name:"Mommy's Kitchen Special Burger", price:250, image:"🍔"},
         {name:"Chicken Sub", price:130, image:"🥪"}, {name:"Chicken Naga Sub", price:150, image:"🥪"}, {name:"BBQ Chicken Sub", price:170, image:"🥪"}, {name:"AMERICAN sub", price:250, image:"🥪"}, {name:"Club Sandwich", price:250, image:"🥪"},
@@ -339,6 +660,7 @@
         {name:"Potato Wedges", price:70, image:"🍟"}, {name:"French Fries", price:100, image:"🍟"}, {name:"Masala Wedges", price:130, image:"🍟"}, {name:"Chicken Popcorn", price:160, image:"🍗"}, {name:"Chicken Samosa (10pcs)", price:150, image:"🥟"}, {name:"Crispy Fried Chicken (2pcs)", price:160, image:"🍗"}, {name:"Cheesy Chicken Fingers (5pcs)", price:220, image:"🍗"}, {name:"Thai Fried Chicken (5pcs)", price:220, image:"🍗"}, {name:"BBQ Fried Chicken (2pcs)", price:220, image:"🍗"}, {name:"Crispy Wings (6pcs)", price:230, image:"🍗"}, {name:"BBQ Wings (6pcs)", price:240, image:"🍗"}, {name:"Nachos", price:250, image:"🌮"}, {name:"Tender Bites (6pcs)", price:250, image:"🍗"}, {name:"Sipsak Pizza (2pcs)", price:250, image:"🍕"}, {name:"Spicy Egg Balls (5pcs)", price:220, image:"🥚"}, {name:"Crispy Fried Prawn (5pcs)", price:250, image:"🍤"}, {name:"Cheese Prawn Roll (5pcs)", price:280, image:"🍤"}, {name:"Cheesy Spicy Meatball", price:280, image:"🥩"}, {name:"French Toast", price:250, image:"🍞"}, {name:"Pocket Pizza (4pcs)", price:350, image:"🍕"},
         {name:"Meyonise", price:20, image:"🧂"}, {name:"Ketchup", price:20, image:"🧂"}, {name:"Cheese Slice", price:35, image:"🧀"}, {name:"Mozzarella cheese", price:250, image:"🧀"}, {name:"Mushroom", price:100, image:"🍄"}, {name:"Sausage", price:60, image:"🌭"}, {name:"Chicken", price:150, image:"🍗"}
       ]},
+      // --- FULL KABAB MAHOL ---
       { id: 1, name: "Kabab Mahol", cat: "food", items: [
         {name:"Chocolate Cup Cake", price:40, image:"🧁"}, {name:"Butterscotch Cup Cake", price:40, image:"🧁"},
         {name:"Lacchi", price:100, image:"🥤"}, {name:"Cold Coffee", price:100, image:"🥤"}, {name:"Strawberry Milk Shake", price:100, image:"🥤"},
@@ -350,11 +672,13 @@
         {name:"Chicken Momo", price:100, image:"🥟"}, {name:"Chicken Cheese Momo", price:130, image:"🥟"},
         {name:"Chicken Shingara", price:80, image:"🥟"}, {name:"Chicken Shomucha", price:80, image:"🥟"}
       ]},
+      // --- FULL SIP & SLAY ---
       { id: 2, name: "Sip & Slay Bistro", cat: "food", items: [
         {name:"Lemon mint mojito", price:70, image:"🍹"}, {name:"Strawberry mojito", price:120, image:"🍹"}, {name:"Blue coconut rice bubble", price:200, image:"🥥"}, {name:"Iced latte", price:150, image:"☕"}, {name:"Regular cold coffee", price:100, image:"☕"},
         {name:"Chicken momos with chilli oil dip (8pcs)", price:150, image:"🥟"}, {name:"Chicken nuggets (8-10 pcs)", price:180, image:"🍗"}, {name:"French fries", price:100, image:"🍟"}, {name:"Naga chicken patty burger", price:170, image:"🍔"}, {name:"Regular Chicken cheese burger", price:150, image:"🍔"}, {name:"Spicy pasta", price:180, image:"🍝"}, {name:"Chicken strips with dip (5 pcs)", price:100, image:"🍗"}, {name:"Meat box", price:180, image:"🥩"},
         {name:"Seasonal fruit cake (1 Pound)", price:1000, image:"🍰"}
       ]},
+      // --- FULL CAFE TIME OUT ---
       { id: 3, name: "Cafe Time Out", cat: "food", items: [
         {name:"Espresso", price:120, image:"☕"}, {name:"Americano", price:150, image:"☕"}, {name:"Latte", price:199, image:"☕"}, {name:"Cappuccino", price:180, image:"☕"}, {name:"Mocha", price:240, image:"☕"}, {name:"Iced Americano", price:170, image:"☕"}, {name:"Iced Latte", price:220, image:"☕"}, {name:"Iced Cappuccino", price:230, image:"☕"}, {name:"Iced Mocha", price:250, image:"☕"}, {name:"Ice Tea", price:140, image:"🧊"}, {name:"Blue ocean", price:210, image:"🧊"}, {name:"Classic mojito", price:190, image:"🍹"}, {name:"Cosmopolitan", price:220, image:"🍹"}, {name:"Coconut margarita", price:210, image:"🍹"}, {name:"Margarita", price:160, image:"🍹"},
         {name:"Cold Coffee", price:200, image:"☕"}, {name:"Orio Shake", price:210, image:"🥤"}, {name:"Lacchi", price:160, image:"🥤"}, {name:"Milk Shake", price:150, image:"🥤"}, {name:"Chocolate Shake", price:180, image:"🥤"},
@@ -374,6 +698,7 @@
         {name:"French Fry", price:99, image:"🍟"}, {name:"Wedges", price:110, image:"🍟"}, {name:"Spicy Garlic mushroom", price:280, image:"🍄"}, {name:"Chicken strips", price:280, image:"🍗"}, {name:"Chicken Nachos", price:250, image:"🌮"}, {name:"BBQ wings 6p", price:350, image:"🍗"}, {name:"Thai Fried Chicken 6p", price:380, image:"🍗"}, {name:"Fried Calamari", price:290, image:"🦑"}, {name:"Chicken Meatbox", price:230, image:"🥩"},
         {name:"Chicken Sub Sandwich", price:170, image:"🥪"}, {name:"BBQ Sub Sandwich", price:199, image:"🥪"}, {name:"Naga Sub Sandwich", price:170, image:"🥪"}, {name:"BBQ Burger", price:250, image:"🍔"}, {name:"Naga Burger", price:220, image:"🍔"}, {name:"Crispy Chicken burger", price:210, image:"🍔"}, {name:"Juicy Lucy Chicken burger", price:280, image:"🍔"}, {name:"Classic Chicken burger", price:250, image:"🍔"}, {name:"Grilled Chicken burger", price:299, image:"🍔"}, {name:"Chicken Cheese blast burger", price:299, image:"🍔"}
       ]},
+      // --- FULL KACCHI GHOR ---
       { id: 4, name: "Kacchi Ghor", cat: "food", items: [
         {name:"Matin Chui Jhal (Sada Bhat + Daal)", price:270, image:"🍛"}, {name:"Sarisha Ilish (Sada Bhat + Daal)", price:320, image:"🍛"}, {name:"Sarisha Chingri (Sada Bhat + Daal)", price:290, image:"🍛"},
         {name:"Dal Bhuna", price:65, image:"🍛"}, {name:"Alur Bhuna", price:65, image:"🍛"}, {name:"Tomato Bhuna", price:65, image:"🍛"}, {name:"Begun Bhuna", price:65, image:"🍛"}, {name:"Daal (Plate)", price:50, image:"🍛"},
@@ -385,6 +710,7 @@
         {name:"Mutton Kacchi (Basmati+Special) 2P", price:950, image:"🍗"}, {name:"Mutton Kacchi (Basmati+Special) 4P", price:1880, image:"🍗"}, {name:"Mutton Kacchi (Basmati+Special) 6P", price:2800, image:"🍗"},
         {name:"Bashmati Rice", price:100, image:"🍚"}, {name:"Plain Polaw", price:60, image:"🍚"}, {name:"Mutton (Addon)", price:120, image:"🍗"}, {name:"Jali Kabab", price:50, image:"🍢"}, {name:"Egg", price:20, image:"🥚"}
       ]},
+      // --- FULL HUNGRY HUT ---
       { id: 5, name: "Hungry Hut", cat: "food", items: [
         {name:"Crispy Fried Chicken (1pc)", price:90, image:"🍗"}, {name:"Spicy Fried Chicken (1pc)", price:100, image:"🍗"}, {name:"Thai Fried Chicken", price:170, image:"🍗"}, {name:"Chicken Lollipop (4pcs)", price:200, image:"🍗"}, {name:"BBQ Wings (6pcs)", price:200, image:"🍗"}, {name:"French Fry", price:70, image:"🍟"}, {name:"Potato Wedges", price:80, image:"🍟"}, {name:"Fish & Chips", price:150, image:"🐟"},
         {name:"Chicken Sub Sandwich", price:100, image:"🥪"}, {name:"Chicken Cheese Sandwich", price:150, image:"🥪"}, {name:"Chicken Naga Sandwich", price:120, image:"🥪"},
@@ -404,6 +730,7 @@
         {name:"Chicken Pizza 8inch", price:250, image:"🍕"}, {name:"Chicken Pizza 10inch", price:350, image:"🍕"}, {name:"Chicken Pizza 12inch", price:450, image:"🍕"}, {name:"BBQ Chicken Pizza 8inch", price:280, image:"🍕"}, {name:"BBQ Chicken Pizza 10inch", price:380, image:"🍕"}, {name:"BBQ Chicken Pizza 12inch", price:480, image:"🍕"},
         {name:"Combo 1 (Burger+Fries+Drinks)", price:250, image:"🍱"}, {name:"Combo 2 (Chicken Fry+Drinks)", price:250, image:"🍱"}
       ]},
+      // --- FULL CAFE DUA ---
       { id: 6, name: "Cafe Dua", cat: "food", items: [
         {name:"Orange Mojito", price:100, image:"🍹"}, {name:"Lemon Mojito", price:100, image:"🍹"}, {name:"Mango Mojito", price:100, image:"🍹"}, {name:"Strawberry Mojito", price:100, image:"🍹"}, {name:"Blueberry Mojito", price:100, image:"🍹"}, {name:"Blue Ocean Mojito", price:100, image:"🍹"},
         {name:"Banana Lassi", price:100, image:"🥤"}, {name:"Mango Lassi", price:100, image:"🥤"}, {name:"Regular Lassi", price:100, image:"🥤"},
@@ -419,6 +746,7 @@
         {name:"Grilled Egg Sandwich", price:100, image:"🥪"}, {name:"BBQ Chicken Wrap", price:180, image:"🌯"}, {name:"Spicy Naga Chicken Wrap", price:190, image:"🌯"}, {name:"Club Sandwich", price:200, image:"🥪"}, {name:"Cheese Club Sandwich", price:220, image:"🥪"}, {name:"BBQ Chicken Sandwich", price:210, image:"🥪"},
         {name:"Combo 1 (Chicken Patty Burger+Fries+Lemon Juice)", price:250, image:"🍱"}, {name:"Combo 2 (Club Sandwich+Chocolate Cold Coffee)", price:350, image:"🍱"}, {name:"Combo 3 (Chicken Fry+Wedges+Lassi)", price:380, image:"🍱"}, {name:"Combo 4 (Crispy Wings+Chocolate Cold Coffee)", price:390, image:"🍱"}
       ]},
+      // --- FULL MBB ---
       { id: 7, name: "MBB", cat: "food", items: [
         {name:"Regular Meatbox", price:120, image:"🥩"}, {name:"Naga Meatbox", price:140, image:"🥩"}, {name:"BBQ Meatbox", price:170, image:"🥩"}, {name:"Cheese Meatbox", price:200, image:"🥩"}, {name:"Mushroom Meatbox", price:250, image:"🥩"}, {name:"MBB Special Meatbox", price:300, image:"🥩"},
         {name:"Old School Mini", price:60, image:"🍔"}, {name:"The Heat Seeker", price:80, image:"🍔"}, {name:"The Crunchmaster", price:120, image:"🍔"}, {name:"The Cheese Master", price:160, image:"🍔"}, {name:"Cheese Master Special", price:180, image:"🍔"}, {name:"BBQ Burger", price:150, image:"🍔"}, {name:"BBQ Special Burger", price:180, image:"🍔"}, {name:"MBB Special Burger", price:250, image:"🍔"},
@@ -428,6 +756,7 @@
         {name:"French Fry", price:60, image:"🍟"}, {name:"Chicken Fry", price:70, image:"🍗"}, {name:"Crispy Wings (6pcs)", price:130, image:"🍗"}, {name:"BBQ Wings (6pcs)", price:150, image:"🍗"}, {name:"Chicken Popcorn", price:160, image:"🍗"}, {name:"Chicken Strip", price:150, image:"🍗"}, {name:"Nachos", price:180, image:"🌮"}, {name:"MBB Special Nachos", price:230, image:"🌮"},
         {name:"Lemon Mint Mojito", price:60, image:"🍹"}, {name:"Pulse Mojito", price:80, image:"🍹"}, {name:"Blue Lagoon Mojito", price:100, image:"🍹"}, {name:"Milk Shake", price:120, image:"🥤"}, {name:"Banana Shake", price:120, image:"🥤"}, {name:"Mango Shake", price:130, image:"🥤"}, {name:"Chocolate Shake", price:150, image:"🥤"}, {name:"Oreo Shake", price:160, image:"🥤"}, {name:"Kitkat Shake", price:180, image:"🥤"}, {name:"Classic Cold Coffee", price:120, image:"☕"}, {name:"Cold Coffee with Ice Cream", price:150, image:"☕"}, {name:"Chocolate Cold Coffee", price:150, image:"☕"}, {name:"Iced Cold Coffee", price:170, image:"☕"}, {name:"Mango Juice", price:100, image:"🍹"}, {name:"Orange Juice", price:100, image:"🍹"}, {name:"Watermelon Juice", price:100, image:"🍹"}
       ]},
+      // --- FULL CHILL N FILL ---
       { id: 8, name: "Chill N Fill", cat: "food", items: [
         {name:"Chicken Patty Burger", price:150, image:"🍔"}, {name:"Crispy Chicken Burger", price:170, image:"🍔"}, {name:"Chicken Cheese Burger", price:200, image:"🍔"},
         {name:"Combo 1 (Burger+Fries+Drinks)", price:210, image:"🍱"}, {name:"Combo 2 (Burger+Fries+Drinks)", price:230, image:"🍱"}, {name:"Combo 3 (Burger+Fries+Drinks)", price:300, image:"🍱"},
@@ -439,6 +768,7 @@
         {name:"Chicken Chowmein (1:2)", price:250, image:"🍜"}, {name:"Chicken Chowmein (1:3)", price:350, image:"🍜"}, {name:"Vegetable Chowmein (1:2)", price:200, image:"🍜"}, {name:"Vegetable Chowmein (1:3)", price:270, image:"🍜"}, {name:"Special Chowmein (1:2)", price:300, image:"🍜"}, {name:"Special Chowmein (1:3)", price:450, image:"🍜"},
         {name:"Oven Baked Pasta", price:280, image:"🍝"}
       ]},
+      // --- FULL FOOD SQUAD ---
       { id: 9, name: "Food Squad", cat: "food", items: [
         {name:"Crispy Fried Chicken (6pcs mini)", price:170, image:"🍗"}, {name:"Spicy Fried Chicken (6pcs mini)", price:199, image:"🍗"}, {name:"Pop Chicken (10 pcs)", price:130, image:"🍗"}, {name:"Chicken Strips (10 pcs)", price:149, image:"🍗"}, {name:"Chicken Shaslik (3pcs)", price:149, image:"🍗"}, {name:"Potato Wedges (10pcs)", price:99, image:"🍟"}, {name:"Cheese French Fry", price:139, image:"🍟"}, {name:"French Fry", price:99, image:"🍟"}, {name:"Loaded French Fries", price:220, image:"🍟"}, {name:"Wonton (8ps)", price:120, image:"🥟"},
         {name:"BBQ Chicken Cheese Burger", price:160, image:"🍔"}, {name:"Chicken Cheese Burger", price:140, image:"🍔"}, {name:"Crispy Chicken Cheese Burger", price:150, image:"🍔"}, {name:"Naga King Burger", price:150, image:"🍔"}, {name:"American Burger", price:230, image:"🍔"},
@@ -453,6 +783,7 @@
         {name:"Crispy Rice Bowl", price:119, image:"🍚"}, {name:"BBQ Rice Bowl", price:139, image:"🍚"}, {name:"Chicken Cheese Cutlet Rice Bowl", price:189, image:"🍚"},
         {name:"BBQ Pizza 8inch", price:450, image:"🍕"}, {name:"BBQ Pizza 12inch", price:600, image:"🍕"}, {name:"Home Special Pizza 8inch", price:520, image:"🍕"}, {name:"Home Special Pizza 12inch", price:800, image:"🍕"}
       ]},
+      // --- FULL FLAMING DINE ---
       { id: 10, name: "Flaming Dine", cat: "food", items: [
         {name:"Chicken Steak Platter", price:450, image:"🍗"}, {name:"Szechuan Platter", price:320, image:"🍗"}, {name:"BBQ Grilled Chicken Platter", price:390, image:"🍗"}, {name:"Honey Mustard Grilled Chicken Platter", price:390, image:"🍗"},
         {name:"Chicken Dominator Pizza 8inch", price:420, image:"🍕"}, {name:"Chicken Dominator Pizza 10inch", price:500, image:"🍕"}, {name:"Chicken Dominator Pizza 12inch", price:720, image:"🍕"},
@@ -470,6 +801,7 @@
         {name:"Chicken Chowmein (1:1)", price:170, image:"🍜"}, {name:"Chicken Chowmein (1:3)", price:380, image:"🍜"}, {name:"Vegetable Chowmein (1:1)", price:150, image:"🍜"}, {name:"Vegetable Chowmein (1:3)", price:330, image:"🍜"},
         {name:"Oven Baked Pasta", price:290, image:"🍝"}, {name:"Oven Baked Naga Pasta", price:270, image:"🍝"}, {name:"White Sauce Pasta", price:230, image:"🍝"}, {name:"Red Sauce Pasta", price:190, image:"🍝"}
       ]},
+      // --- FULL BLACK PEPPER ---
       { id: 11, name: "Black Pepper", cat: "food", items: [
         {name:"Strawberry Mojito", price:120, image:"🍹"}, {name:"Orange Mojito", price:120, image:"🍹"}, {name:"Blueberry Mojito", price:120, image:"🍹"}, {name:"Blue Ocean Mojito", price:120, image:"🍹"}, {name:"Mango Mojito", price:120, image:"🍹"}, {name:"Lemon Mojito", price:120, image:"🍹"},
         {name:"Salt Lassi", price:100, image:"🥤"}, {name:"Mango Lassi", price:120, image:"🥤"}, {name:"Banana Lassi", price:120, image:"🥤"}, {name:"Regular Lassi", price:100, image:"🥤"}, {name:"Nut Lassi", price:150, image:"🥤"},
@@ -477,6 +809,7 @@
         {name:"Coffee Latte", price:150, image:"☕"}, {name:"Cold Coffee", price:120, image:"☕"}, {name:"Brazilian Lemonade", price:100, image:"🍹"}, {name:"Hot Coffee", price:90, image:"☕"}, {name:"Black Coffee", price:70, image:"☕"}, {name:"Ice Tea", price:60, image:"🧊"}, {name:"Tea", price:40, image:"☕"}, {name:"Lemon Mint", price:40, image:"🍹"},
         {name:"Regular Boba", price:50, image:"🧋"}, {name:"Boba Tea", price:150, image:"🧋"}, {name:"Strawberry Boba", price:250, image:"🧋"}, {name:"Blueberry Boba", price:250, image:"🧋"}, {name:"Mango Boba", price:250, image:"🧋"}, {name:"Banana Boba", price:200, image:"🧋"}, {name:"Oreo Boba", price:210, image:"🧋"}, {name:"Butterscotch Boba", price:270, image:"🧋"}, {name:"Milk Nut Boba", price:250, image:"🧋"}, {name:"Chocolate Boba", price:200, image:"🧋"}, {name:"Caramel Boba", price:210, image:"🧋"}, {name:"Kitkat Boba", price:250, image:"🧋"}
       ]},
+      // --- FULL ROSOI GHOR ---
       { id: 12, name: "Rosoi Ghor", cat: "food", items: [
         {name:"Chicken Fajita Pizza 8inch", price:1050, image:"🍕"}, {name:"Chicken Fajita Pizza 10inch", price:1300, image:"🍕"}, {name:"Chicken Fajita Pizza 12inch", price:1420, image:"🍕"},
         {name:"Rosoi Ghor Special BBQ Chicken Pan Pizza 8inch", price:1150, image:"🍕"}, {name:"Rosoi Ghor Special BBQ Chicken Pan Pizza 10inch", price:1400, image:"🍕"}, {name:"Rosoi Ghor Special BBQ Chicken Pan Pizza 12inch", price:1520, image:"🍕"},
@@ -497,6 +830,7 @@
         {name:"Thai Soup (1:1)", price:200, image:"🍲"}, {name:"Chicken Thai Soup (1:3)", price:350, image:"🍲"}, {name:"Rosoi Ghor Special Thai Soup (1:3)", price:450, image:"🍲"}, {name:"Thai Clear Soup (1:3)", price:280, image:"🍲"}, {name:"Chicken Corn Soup (1:3)", price:300, image:"🍲"}, {name:"Shishuon Soup (1:3)", price:380, image:"🍲"}, {name:"Chicken Vegetable Soup (1:3)", price:300, image:"🍲"}, {name:"Hot and Sour Soup (1:3)", price:300, image:"🍲"},
         {name:"Chicken Chowmein (1:3)", price:300, image:"🍜"}, {name:"Prawn Chowmein (1:3)", price:450, image:"🍜"}, {name:"Rosoi Ghor Special Chowmein (1:3)", price:550, image:"🍜"}, {name:"Thai Noodles (1:3)", price:380, image:"🍜"}, {name:"American Noodles (1:3)", price:360, image:"🍜"}, {name:"American Chopsy (1:3)", price:400, image:"🍜"}, {name:"Vegetable Chowmein (1:3)", price:260, image:"🍜"}
       ]},
+      // --- FULL CAFE JINGBANG ---
       { id: 13, name: "Cafe Jingbang", cat: "food", items: [
         {name:"Regular Fuchka (6pcs)", price:60, image:"🍢"}, {name:"Special Doi Fuchka (6pcs)", price:120, image:"🍢"}, {name:"Naga Fuchka (6pcs)", price:80, image:"🍢"}, {name:"Chicken Fuchka (6pcs)", price:100, image:"🍢"}, {name:"Doi Fuchka", price:100, image:"🍢"}, {name:"Beef Fuchka", price:60, image:"🍢"}, {name:"Chocolate Fuchka", price:100, image:"🍢"},
         {name:"Regular Chotpoti", price:60, image:"🍲"}, {name:"Naga Chotpoti", price:70, image:"🍲"}, {name:"Chicken Chotpoti", price:100, image:"🍲"}, {name:"Nababi Chotpoti", price:100, image:"🍲"},
@@ -510,12 +844,24 @@
         {name:"Coca Cola", price:80, image:"🥤"}, {name:"Sprite", price:80, image:"🥤"},
         {name:"Dudh Cha", price:20, image:"☕"}, {name:"Rong Cha", price:20, image:"☕"}, {name:"Chak", price:30, image:"☕"}, {name:"Ruti Kofi", price:60, image:"☕"}, {name:"Cold Coffee", price:100, image:"☕"}
       ]},
+      // --- FULL CHUMUK ---
       { id: 14, name: "Chumuk", cat: "food", items: [
         {name:"Chicken Momo (6 Pcs)", price:120, image:"🥟"}, {name:"Chicken Roll", price:100, image:"🌯"}, {name:"Chicken Singara (6 Pcs)", price:150, image:"🥟"}, {name:"Chicken Fry (6 Pcs)", price:300, image:"🍗"}, {name:"Chicken Chowmein (1:3)", price:270, image:"🍜"}, {name:"Chicken Masala (1:3)", price:350, image:"🍛"}, {name:"Chicken Chaap (1:1)", price:150, image:"🍗"}, {name:"Chicken Pakora (10 Pcs)", price:200, image:"🍗"}, {name:"Chicken Popcorn (25 Pcs)", price:200, image:"🍗"}, {name:"Momo Soup (1:3)", price:350, image:"🍲"}, {name:"Thai Soup (1:3)", price:380, image:"🍲"}, {name:"Parota (1 Pcs)", price:15, image:"🍞"}, {name:"Khasir Paya + Parota (2Pcs) (1:1)", price:160, image:"🍲"}, {name:"Lassi", price:90, image:"🥤"}, {name:"Cold Coffee", price:110, image:"☕"}, {name:"Milkshake", price:130, image:"🥤"}, {name:"Milk Tea", price:25, image:"☕"}, {name:"Black Tea", price:15, image:"☕"}, {name:"Fish Fry (per plate)", price:200, image:"🐟"}
       ]},
+      // --- FULL RIZIQ ---
+      { id: 19, name: "Riziq Restaurant", cat: "food", items: [
+        {name:"চিকেন আল ফাহাম (রিজিক স্পেশাল)", price:500, image:"🍗"}, {name:"চিকেন আচারি মাসালা", price:180, image:"🍗"}, {name:"চিকেন রেশমি কাবাব (প্রতি হাফ)", price:170, image:"🍗"}, {name:"চিকেন হারিয়ালি কাবাব (প্রতি হাফ)", price:160, image:"🍗"}, {name:"বারবিকিউ চিকেন (প্রতি পিস)", price:160, image:"🍗"}, {name:"চিকেন তন্দুরি (প্রতি পিস)", price:100, image:"🍗"}, {name:"চিকেন উইংস (৫ পিস)", price:160, image:"🍗"}, {name:"ফিশ কাবাব", price:160, image:"🍢"},
+        {name:"চিকেন বিরিয়ানী", price:160, image:"🍛"}, {name:"চিকেন বিরিয়ানী রাইস (এক্সট্রা)", price:70, image:"🍛"}, {name:"মাটন বিরিয়ানী", price:260, image:"🍛"}, {name:"কাচ্চি বিরিয়ানী", price:270, image:"🍛"}, {name:"কোয়েল পিঠ বিরিয়ানী", price:200, image:"🍛"},
+        {name:"রুই মাছ, ভাত, ডাল (প্রতি হাফ)", price:180, image:"🐟"}, {name:"বোয়াল মাছ, ভাত, ডাল (প্রতি হাফ)", price:250, image:"🐟"}, {name:"পাবদা মাছ, ভাত, डাল (প্রতি হাফ)", price:250, image:"🐟"}, {name:"চিঙড়ি মাছ, ভাত, डाल (প্রতি হাফ)", price:250, image:"🐟"}, {name:"ইলিশ मাছ, भात, डाल (প্রতি हाफ)", price:250, image:"🐟"}, {name:"आइড় मাছ, भात, डाल (प्रति हाफ)", price:250, image:"🐟"}, {name:"राइम मাছ, भात, डाल (प्रति हाफ)", price:170, image:"🐟"}, {name:"छोटमাছ, भात, डाल (प्रति हाफ)", price:160, image:"🐟"}, {name:"मका/मला मাছ, भात, डाल (प्रति हाफ)", price:160, image:"🐟"}, {name:"शैल मাছ, भात, डाल (प्रति हाफ)", price:170, image:"🐟"},
+        {name:"रिजिक स्पेशाल सातकरा (माटन दाल गोशत)", price:500, image:"🍖"}, {name:"माटन दाल गोशत", price:240, image:"🍖"}, {name:"रिजिक स्पेशाल सातकरा (माटन कालाभुना)", price:240, image:"🍖"}, {name:"देशि मोरग पोलाओ, भात, डाल", price:240, image:"🍛"}, {name:"ब्रायलार मोरग पोलाओ, भात, डाल", price:160, image:"🍛"}, {name:"ब्रायलार दोयी चिकेन, भात, डाल", price:170, image:"🍗"}, {name:"कक मोरग पोलाओ, भात, डाल", price:240, image:"🍛"}, {name:"चिकेन रोस्ट, भात, डाल", price:170, image:"🍗"}, {name:"खासिर मांस, भात, डाल", price:260, image:"🍖"}, {name:"कोयेल पिठ, भात, डाल", price:180, image:"🍗"}, {name:"हाँसेर मांस, भात, डाल", price:250, image:"🍗"},
+        {name:"आम जुस (रेगुलार)", price:90, image:"🥤"}, {name:"आम जुस (प्रिमियाम)", price:160, image:"🥤"}, {name:"आपेल जुस", price:80, image:"🥤"}, {name:"माल्टा जुस (रेगुलार)", price:110, image:"🥤"}, {name:"माल्टा जुस (प्रिमियाम)", price:220, image:"🥤"}, {name:"अरेंज जुस (रेगुलार)", price:100, image:"🥤"}, {name:"अरेंज जुस (प्रिमियाम)", price:200, image:"🥤"}, {name:"आनारस जुस", price:70, image:"🥤"}, {name:"आङुर जुस (रेगुलार)", price:170, image:"🥤"}, {name:"आङुर जुस (प्रिमियाम)", price:300, image:"🥤"}, {name:"डालिम जुस (रेगुलार)", price:170, image:"🥤"}, {name:"डालिम जुस (प्रिमियाम)", price:300, image:"🥤"}, {name:"लेबु जुस", price:50, image:"🥤"}, {name:"मिक्स जुस", price:100, image:"🥤"}, {name:"बानाना मिल्क शेक (मिक्स)", price:80, image:"🥤"}, {name:"म्यांगो मिक्स शेक", price:140, image:"🥤"}, {name:"स्ट्रबेरी मिक्स शेक", price:100, image:"🥤"}, {name:"भानिला मिक्स शेक", price:100, image:"🥤"}, {name:"चकलेट मिक्स शेक", price:100, image:"🥤"}, {name:"नरमाल लाच्छि", price:80, image:"🥤"}, {name:"स्पेशाल लाच्छि", price:90, image:"🥤"}, {name:"नरमाल फालुदा", price:90, image:"🥤"}, {name:"स्पेशाल फालुदा", price:120, image:"🥤"}, {name:"स्पेशाल फालुदा बड पाकेट", price:260, image:"🥤"}, {name:"स्पेशाल फालुदा छोट पाकेट", price:140, image:"🥤"}, {name:"पेपे जुस", price:80, image:"🥤"}, {name:"तरमुज जुस", price:50, image:"🥤"}, {name:"बेल जुस", price:80, image:"🥤"}, {name:"आखेर रस/जुस", price:50, image:"🥤"}, {name:"बुरहानि (प्रति लिटर)", price:200, image:"🥤"}, {name:"बुरहानि (प्रति ग्लास)", price:40, image:"🥤"},
+        {name:"नरमाल दुध चा", price:20, image:"☕"}, {name:"नरमाल रंग चा", price:10, image:"☕"}, {name:"स्पेशाल चा", price:30, image:"☕"}, {name:"नरमाल कफि", price:40, image:"☕"}, {name:"स्पेशाल कफि", price:60, image:"☕"}, {name:"नरमाल दुध चा (पार्सेल)", price:25, image:"☕"}, {name:"नरमाल रंग चा (पार्सेल)", price:15, image:"☕"}, {name:"स्पेशाल चा (पार्सेल)", price:40, image:"☕"}, {name:"नरमाल कफि (पार्सेल)", price:60, image:"☕"}, {name:"स्पेशाल कफि (पार्सेल)", price:70, image:"☕"},
+        {name:"मिक्स भर्ता (५ आइटेम)", price:200, image:"🥗"}, {name:"बोटिक भुना (लाइफा बोटिक)", price:80, image:"🐟"}, {name:"बोटिक भर्ता (चेपा बोटिक)", price:20, image:"🐟"}, {name:"डाल भर्ता", price:20, image:"🥗"}, {name:"गाजर भर्ता", price:20, image:"🥗"}, {name:"पेपे भर्ता", price:20, image:"🥗"}, {name:"आलु भर्ता", price:20, image:"🥗"}, {name:"टमेटो भर्ता", price:20, image:"🥗"}, {name:"पटल भर्ता", price:20, image:"🥗"}, {name:"कुला भर्ता", price:20, image:"🥗"}, {name:"चिङडि भर्ता/बडा", price:30, image:"🥗"}, {name:"शिम भर्ता", price:20, image:"🥗"}, {name:"बेगुन भर्ता", price:20, image:"🥗"}, {name:"तुरा भर्ता", price:20, image:"🥗"}, {name:"लुबि भर्ता", price:20, image:"🥗"}, {name:"माछेर भुरि (पाङ्गास माछ)", price:80, image:"🐟"}, {name:"माछेर डिम भर्ता", price:50, image:"🐟"}, {name:"डिम भर्ता", price:20, image:"🥚"}, {name:"शिम सोल", price:70, image:"🥗"}, {name:"लता चिङडि", price:40, image:"🥗"}, {name:"करला चिङडि", price:40, image:"🥗"}, {name:"पाबाकप भाजि", price:20, image:"🥗"}, {name:"चिचिङ्गा भाजि", price:20, image:"🥗"}, {name:"करला भाजि", price:30, image:"🥗"}, {name:"बेडि/चेदुष भाजि", price:20, image:"🥗"}, {name:"लुबि भाजि", price:20, image:"🥗"}, {name:"लाउ भाजि", price:20, image:"🥗"}, {name:"लाउ चिङडि", price:40, image:"🥗"}, {name:"लाउ सोल", price:40, image:"🥗"}, {name:"मिष्टि लाउ भाजि", price:20, image:"🥗"}, {name:"लाल शाक", price:20, image:"🥗"}, {name:"पुँइ शाक", price:20, image:"🥗"}, {name:"लाइ शाक", price:40, image:"🥗"}, {name:"बोटिक भुना, भात, डाल (जनप्रति)", price:120, image:"🍛"}, {name:"एकटा भर्ता, भात, डाल", price:70, image:"🍛"}, {name:"एकटा भाजि, भात, डाल", price:10, image:"🍛"}, {name:"भात, डाल (जनप्रति)", price:50, image:"🍛"},
+        {name:"रिजिक स्पेशाल क्रिम पुडिङ (प्रति पिस)", price:70, image:"🍮"}, {name:"रिजिक स्पेशाल दइ (बड बाटि)", price:130, image:"🍦"}, {name:"रिजिक स्पेशाल दइ (छोट बाटि)", price:80, image:"🍦"}, {name:"रिजिक दइ", price:40, image:"🍦"}, {name:"रिजिक स्पेशाल दइ", price:80, image:"🍦"}, {name:"रिजिक स्पेशाल फिरनि", price:30, image:"🍮"}, {name:"सात कलार चा", price:90, image:"☕"}
+      ]},
       
-      // --- 2. GROCERY CATEGORY ---
-      { id: 15, name: "🛒 বাজার (Grocery)", cat: "grocery", items: [
+      // --- GROCERY, VEG, MEDICINE, ETC ---
+      { id: 15, name: "🛒 বাজার (Grocery)", cat: "grocery", items: [ /* Full Data */ 
         {name: "চাল (Rice) - ১ কেজি", price: 0, image: "🍚"},
         {name: "বাসমতি চাল (Basmati) - ৫০০ গ্রাম", price: 0, image: "🍚"},
         {name: "মসুর ডাল (Masur Dal) - ২৫০ গ্রাম", price: 0, image: "🫘"},
@@ -565,68 +911,41 @@
         {name: "হ্যান্ড টাওয়েল (Hand Towel) - ১ প্যাক", price: 0, image: "🧻"},
         {name: "টিস্যু বক্স (Tissue Box) - ১ বক্স", price: 0, image: "🧻"}
       ]},
-      
-      // --- 3. VEGETABLES CATEGORY ---
-      { id: 16, name: "🥦 তাজা সবজি (Vegetables)", cat: "vegetables", items: [
-        {name: "টমেটো (Tomato) - ৫০০ গ্রাম", price: 0, image: "🍅"},
-        {name: "বাঁধাকপি (Cabbage) - ১ পিস", price: 0, image: "🥬"},
-        {name: "ফুলকপি (Cauliflower) - ১ পিস", price: 0, image: "🥦"},
-        {name: "লাউ/ঝিঙা (Lau/Jhinga) - ৫০০ গ্রাম", price: 0, image: "🥒"},
-        {name: "মিষ্টি কুমড়া (Sweet Pumpkin) - ৫০০ গ্রাম", price: 0, image: "🎃"}
-      ]},
-      
-      // --- 4. MEDICINE CATEGORY ---
-      { id: 17, name: "💊 ওষুধ (Medicine)", cat: "medicine", items: [
-        {name: "নাপা (Napa) - ১ ট্যাব", price: 0, image: "💊"},
-        {name: "এসি (Ace) - ১ ট্যাব", price: 0, image: "💊"},
-        {name: "এন্টাসিড (Antacid) - ১ ট্যাব", price: 0, image: "💊"},
-        {name: "কাশির সিরাপ (Cough Syrup) - ১০০ মিলি", price: 0, image: "🍬"},
-        {name: "ভিটামিন সি (Vitamin C) - ১ ট্যাব", price: 0, image: "🧪"},
-        {name: "ওআরএস (ORS) - ১ প্যাক", price: 0, image: "🧂"},
-        {name: "এন্টিহিস্টামিন (Antihistamine) - ১ ট্যাব", price: 0, image: "💊"},
-        {name: "এন্টিবায়োটিক (Antibiotic) - ১ ক্যাপসুল", price: 0, image: "💊"},
-        {name: "আই ড্রপ (Eye Drops)", price: 0, image: "💧"},
-        {name: "প্লাস্টার (Bandage)", price: 0, image: "🩹"},
-        {name: "হ্যান্ড স্যানিটাইজার (Sanitizer) - ১০০ মিলি", price: 0, image: "🧴"}
-      ]},
-      
-      // --- 5. BISCUITS CATEGORY ---
-      { id: 18, name: "🍪 বিস্কুট (Biscuits)", cat: "biscuits", items: [
-        {name: "পার্লে জি (Parle G) - ১ প্যাক", price: 0, image: "🍪"},
-        {name: "মেরি গোল্ড (Marie Gold) - ১ প্যাক", price: 0, image: "🍪"},
-        {name: "ক্রিম বিস্কুট (Cream Biscuit) - ১ প্যাক", price: 0, image: "🍪"},
-        {name: "প্রাণ কেক (Pran Cake) - ১ প্যাক", price: 0, image: "🍰"},
-        {name: "চকলেট বিস্কুট (Choco Biscuit) - ১ প্যাক", price: 0, image: "🍪"},
-        {name: "বাটার বিস্কুট (Butter Biscuit) - ১ প্যাক", price: 0, image: "🍪"},
-        {name: "নাবিসকো হুইট (Nabisco Wheat) - ১ প্যাক", price: 0, image: "🍪"},
-        {name: "নারকেল বিস্কুট (Coconut Biscuit) - ১ প্যাক", price: 0, image: "🍪"},
-        {name: "গ্লুকোজ বিস্কুট (Glucose Biscuit) - ১ প্যাক", price: 0, image: "🍪"},
-        {name: "নাইস বিস্কুট (Nice Biscuit) - ১ প্যাক", price: 0, image: "🍪"},
-        {name: "ওরিও (Oreo) - ১ প্যাক", price: 0, image: "🍪"},
-        {name: "পিস্তা বিস্কুট (Pista Biscuit) - ১ প্যাক", price: 0, image: "🍪"},
-        {name: "কাজু বিস্কুট (Kaju Biscuit) - ১ প্যাক", price: 0, image: "🍪"},
-        {name: "ভিটা ক্র্যাকার (Vita Crackers) - ১ প্যাক", price: 0, image: "🍪"},
-        {name: "লবণ বিস্কুট (Salt Biscuit) - ১ প্যাক", price: 0, image: "🍪"}
-      ]}
+      { id: 16, name: "🥦 তাজা সবজি (Vegetables)", cat: "vegetables", items: [ {name: "টমেটো (Tomato) - ৫০০ গ্রাম", price: 0, image: "🍅"}, {name: "বাঁধাকপি (Cabbage) - ১ পিস", price: 0, image: "🥬"}, {name: "ফুলকপি (Cauliflower) - ১ পিস", price: 0, image: "🥦"}, {name: "লাউ/ঝিঙা (Lau/Jhinga) - ৫০০ গ্রাম", price: 0, image: "🥒"}, {name: "মিষ্টি কুমড়া (Sweet Pumpkin) - ৫০০ গ্রাম", price: 0, image: "🎃"} ] },
+      { id: 17, name: "💊 ওষুধ (Medicine)", cat: "medicine", items: [ {name: "নাপা (Napa) - ১ ট্যাব", price: 0, image: "💊"}, {name: "এসি (Ace) - ১ ট্যাব", price: 0, image: "💊"}, {name: "এন্টাসিড (Antacid) - ১ ট্যাব", price: 0, image: "💊"}, {name: "কাশির সিরাপ (Cough Syrup) - ১০০ মিলি", price: 0, image: "🍬"}, {name: "ভিটামিন সি (Vitamin C) - ১ ট্যাব", price: 0, image: "🧪"}, {name: "ওআরএস (ORS) - ১ প্যাক", price: 0, image: "🧂"}, {name: "এন্টিহিস্টামিন (Antihistamine) - ১ ট্যাব", price: 0, image: "💊"}, {name: "এন্টিবায়োটিক (Antibiotic) - ১ ক্যাপসুল", price: 0, image: "💊"}, {name: "আই ড্রপ (Eye Drops)", price: 0, image: "💧"}, {name: "প্লাস্টার (Bandage)", price: 0, image: "🩹"}, {name: "হ্যান্ড স্যানিটাইजार (Sanitizer) - ১০০ মিলি", price: 0, image: "🧴"} ] },
+      { id: 18, name: "🍪 বিস্কুট (Biscuits)", cat: "biscuits", items: [ {name: "পার্লে জি (Parle G) - ১ প্যাক", price: 0, image: "🍪"}, {name: "মেরি গোল্ড (Marie Gold) - ১ প্যাক", price: 0, image: "🍪"}, {name: "ক্রিম বিস্কুট (Cream Biscuit) - ১ প্যাক", price: 0, image: "🍪"}, {name: "প্রাণ কেক (Pran Cake) - ১ প্যাক", price: 0, image: "🍰"}, {name: "চকলেট বিস্কুট (Choco Biscuit) - ১ প্যাক", price: 0, image: "🍪"}, {name: "বাটার বিস্কুট (Butter Biscuit) - ১ প্যাক", price: 0, image: "🍪"}, {name: "নাবিসকো হুইট (Nabisco Wheat) - ১ প্যাক", price: 0, image: "🍪"}, {name: "নারকেল বিস্কুট (Coconut Biscuit) - ১ প্যাক", price: 0, image: "🍪"}, {name: "গ্লুকোজ বিস্কুট (Glucose Biscuit) - ১ প্যাক", price: 0, image: "🍪"}, {name: "নাইস বিস্কুট (Nice Biscuit) - ১ প্যাক", price: 0, image: "🍪"}, {name: "ওরিও (Oreo) - ১ প্যাক", price: 0, image: "🍪"}, {name: "পিস্তা বিস্কুট (Pista Biscuit) - ১ প্যাক", price: 0, image: "🍪"}, {name: "কাজু বিস্কুট (Kaju Biscuit) - ১ প্যাক", price: 0, image: "🍪"}, {name: "ভিটা ক্র্যাকার (Vita Crackers) - ১ প্যাক", price: 0, image: "🍪"}, {name: "লবণ বিস্কুট (Salt Biscuit) - ১ প্যাক", price: 0, image: "🍪"} ] },
+      { id: 20, name: "🥤 ড্রিংকস (Drinks)", cat: "drinks", items: [ {name: "মোজো (Mozo) - ২৫০ মিলি", price: 0, image: "🥤"}, {name: "প্রাণ ফ্রুট জুস (Pran) - ২৫০ মিলি", price: 0, image: "🥤"}, {name: "কোকা-কোলা (Coca-Cola) - ২৫০ মিলি", price: 0, image: "🥤"}, {name: "স্প্রাইট (Sprite) - ২৫০ মিলি", price: 0, image: "🥤"}, {name: "পেপসি (Pepsi) - ২৫০ মিলি", price: 0, image: "🥤"}, {name: "রেড বুল (Red Bull) - ২৫০ মিলি", price: 0, image: "🥤"} ] },
+      { id: 21, name: "🍟 চিপস কর্নার (Chips)", cat: "chips", items: [ {name: "কুরকুরে (Kurkure) - ১ প্যাক", price: 0, image: "🍟"}, {name: "লেইস (Lays) - ১ প্যাক", price: 0, image: "🍟"} ] },
+      { id: 22, name: "🍫 চকলেট কর্নার (Chocolate)", cat: "chocolate", items: [ {name: "কিটক্যাট (KitKat) - ১ পিস", price: 0, image: "🍫"}, {name: "ডেইরি মিল্ক (Dairy Milk) - ১ পিস", price: 0, image: "🍫"} ] }
     ];
 
-    // ------------------ CART & APP LOGIC ------------------
+    // ================= CART LOGIC =================
     let cart = {};
     let currentRestoId = null;
     let activeCategory = 'all';
     let searchQuery = '';
 
     const restoContainer = document.getElementById('restaurantContainer');
+    const menuOverlay = document.getElementById('menuOverlay');
     const menuPanel = document.getElementById('menuPanel');
     const menuRestoName = document.getElementById('menuRestoName');
-    const menuRestoSub = document.getElementById('menuRestoSub');
     const menuItemsList = document.getElementById('menuItemsList');
+    const menuBackBtn = document.getElementById('menuBackBtn');
     const closeMenuBtn = document.getElementById('closeMenuBtn');
     const cartItemsContainer = document.getElementById('cartItemsContainer');
     const cartFoodPrice = document.getElementById('cartFoodPrice');
     const confirmBtn = document.getElementById('confirmOrderBtn');
     const searchInput = document.getElementById('searchInput');
     const catItems = document.querySelectorAll('.cat-item');
+    const menuSearchInput = document.getElementById('menuSearchInput');
+
+    const paymentInputs = document.querySelectorAll('input[name="paymentMethod"]');
+    let selectedPayment = 'ক্যাশ অন ডেলিভারি (COD)';
+    paymentInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            selectedPayment = this.value;
+        });
+    });
 
     function renderRestaurants() {
       let filtered = restaurantData;
@@ -637,7 +956,7 @@
         <div class="resto-card" data-restoid="${r.id}">
           <h3>${r.name}</h3>
           <p>${r.items.length} items</p>
-          <div class="badge">${r.cat === 'food' ? '🍔' : r.cat === 'grocery' ? '🛒' : r.cat === 'vegetables' ? '🥦' : r.cat === 'medicine' ? '💊' : r.cat === 'biscuits' ? '🍪' : '🍰'}</div>
+          <div class="badge">${r.cat === 'food' ? '🍔' : r.cat === 'grocery' ? '🛒' : r.cat === 'vegetables' ? '🥦' : r.cat === 'medicine' ? '💊' : r.cat === 'biscuits' ? '🍪' : r.cat === 'drinks' ? '🥤' : r.cat === 'chips' ? '🍟' : r.cat === 'chocolate' ? '🍫' : '🍰'}</div>
         </div>
       `).join('');
 
@@ -648,12 +967,24 @@
       });
     }
 
+    menuSearchInput.addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase().trim();
+      const items = menuItemsList.querySelectorAll('.menu-item');
+      items.forEach(item => {
+        const name = item.querySelector('h4').textContent.toLowerCase();
+        if (name.includes(searchTerm) || searchTerm === '') {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    });
+
     function openMenu(restoId) {
       const resto = restaurantData.find(r => r.id === restoId);
       if (!resto) return;
       currentRestoId = restoId;
       menuRestoName.textContent = resto.name;
-      menuRestoSub.textContent = `Shop: ${resto.name}`;
       
       menuItemsList.innerHTML = resto.items.map((item, idx) => {
         const priceText = (item.price === 0 || !item.price) ? "বাজার দর" : `৳ ${item.price}`;
@@ -669,26 +1000,49 @@
         `;
       }).join('');
       
+      menuSearchInput.value = '';
+      menuItemsList.querySelectorAll('.menu-item').forEach(el => el.classList.remove('hidden'));
+      
       menuItemsList.querySelectorAll('button').forEach(btn => {
         btn.addEventListener('click', function() {
           addToCart(parseInt(this.dataset.restoid), this.dataset.name, parseInt(this.dataset.price));
           renderCart();
         });
       });
-      menuPanel.classList.add('active');
+      menuOverlay.classList.add('active');
     }
 
-    closeMenuBtn.addEventListener('click', function() {
-      menuPanel.classList.remove('active');
+    function closeMenu() {
+      menuOverlay.classList.remove('active');
       currentRestoId = null;
+    }
+
+    menuBackBtn.addEventListener('click', closeMenu);
+    closeMenuBtn.addEventListener('click', closeMenu);
+    menuOverlay.addEventListener('click', function(e) {
+      if (e.target === this) closeMenu();
     });
 
     function addToCart(restoId, name, price) {
       const resto = restaurantData.find(r => r.id === restoId);
       const restoName = resto ? resto.name : 'Unknown';
       const key = `${restoId}-${name}`;
-      if (cart[key]) cart[key].qty += 1;
-      else cart[key] = { name, price, qty: 1, restoName };
+      
+      let useProgression = false;
+      let match = name.match(/-\s*(\d+(?:\.\d+)?)\s*গ্রাম/i);
+      if (match && parseFloat(match[1]) === 50) {
+        useProgression = true;
+      }
+      
+      if (cart[key]) {
+        if (useProgression) { cart[key].qty += 1; } 
+        else { cart[key].qty += 1; }
+      } else {
+        cart[key] = { name, price, qty: 1, restoName, useProgression };
+      }
+      
+      let itemName = name.split('-')[0].trim();
+      showToast(`${itemName} কার্টে যোগ করা হয়েছে!`);
       renderCart();
     }
 
@@ -712,10 +1066,8 @@
       let html = '';
       keys.forEach(key => {
         const item = cart[key];
-        if (item.price > 0) {
-            foodTotal += item.price * item.qty;
-        }
-        const displayName = formatItemDisplay(item.name, item.qty);
+        if (item.price > 0) foodTotal += item.price * item.qty;
+        const displayName = getSizeLabel(item.name, item.qty);
         const subtotal = item.price * item.qty;
         html += `
           <div class="cart-item">
@@ -771,7 +1123,7 @@
         const item = cart[key];
         const subtotal = item.price * item.qty;
         total += subtotal;
-        const displayName = formatItemDisplay(item.name, item.qty);
+        const displayName = getSizeLabel(item.name, item.qty);
         itemLines += `• ${displayName} (${item.restoName}) = ৳${subtotal}\n`;
       });
 
@@ -791,6 +1143,7 @@ Name: ${deliveryName}
 Phone: ${deliveryPhone}
 Address: ${deliveryAddress}
 ${notePart}
+💳 পেমেন্ট পদ্ধতি: ${selectedPayment}
 ------------------------
 🛒 Items:
 ${itemLines}
@@ -800,7 +1153,19 @@ Total Price: ৳${total}`;
     confirmBtn.addEventListener('click', function() {
       const msg = buildOrderMessage();
       if (!msg) return;
+      
+      // Send to WhatsApp
       window.open(`https://wa.me/8801867477158?text=${encodeURIComponent(msg)}`, '_blank');
+      
+      // Send to Telegram
+      fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text: msg
+        })
+      }).catch(err => console.error('Telegram error:', err));
     });
 
     searchInput.addEventListener('input', function() {
