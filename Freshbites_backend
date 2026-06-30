@@ -1,0 +1,46 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+
+const app = express();
+app.use(express.json());
+app.use(cors());
+
+// ✅ এখানে আপনার ডেটাবেস লিংক বসান (আপনার ইউজারনেম freshbites_data আর পাস yasin999000 দিয়ে)
+const MONGO_URI = "mongodb+srv://freshbites_data:yasin999000@cluster0.6epb13g.mongodb.net/FreshBites?retryWrites=true&w=majority";
+
+// MongoDB কানেক্ট করার ফাংশন
+mongoose.connect(MONGO_URI)
+  .then(() => console.log('✅ ডেটাবেস কানেক্টেড!'))
+  .catch(err => console.log('❌ ডেটাবেস কানেক্ট হয়নি:', err));
+
+// অর্ডার সেভ করার স্কিমা (Schema)
+const OrderSchema = new mongoose.Schema({
+  name: String,
+  phone: String,
+  address: String,
+  items: String,
+  total: String,
+  payment: String,
+  note: String,
+  createdAt: { type: Date, default: Date.now }
+});
+const Order = mongoose.model('Order', OrderSchema);
+
+// অর্ডার রিসিভ করার API এন্ডপয়েন্ট
+app.post('/api/order', async (req, res) => {
+  try {
+    const { name, phone, address, items, total, payment, note } = req.body;
+    
+    const newOrder = new Order({ name, phone, address, items, total, payment, note });
+    await newOrder.save();
+
+    res.status(200).json({ message: 'অর্ডার সফলভাবে ডেটাবেসে সেভ হয়েছে!' });
+  } catch (err) {
+    res.status(500).json({ error: 'অর্ডার সেভ করতে সমস্যা হয়েছে' });
+  }
+});
+
+// সার্ভার রান করা
+const PORT = 5000;
+app.listen(PORT, () => console.log(`🚀 সার্ভার চলছে পোর্ট ${PORT} এ`));
